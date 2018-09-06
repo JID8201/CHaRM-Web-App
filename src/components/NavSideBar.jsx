@@ -15,6 +15,8 @@ import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { inject } from 'mobx-react';
+import { observable } from 'mobx';
 
 const drawerWidth = 240;
 
@@ -43,14 +45,10 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
+@inject("store")
 class ClippedDrawer extends React.Component {
   state = {
-    auth: false,
     anchorEl: null,
-  };
-
-  handleChange = event => {
-    this.setState({ auth: event.target.checked });
   };
 
   handleMenu = event => {
@@ -61,10 +59,15 @@ class ClippedDrawer extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  logout = () => {
+    this.setState({ anchorEl: null});
+    this.props.store.authenticate();
+  }
+
 
   render() {
-    const { classes, children } = this.props;
-    const { auth, anchorEl } = this.state;
+    const { classes, children, store } = this.props;
+    const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
     return (
@@ -74,6 +77,8 @@ class ClippedDrawer extends React.Component {
               <Typography style={{flex: '1'}} variant="title" color="inherit" >
                 Photos
               </Typography>
+              { store.authenticated && (
+                <div>
                   <IconButton
                     aria-owns={open ? 'menu-appbar' : null}
                     aria-haspopup="true"
@@ -96,13 +101,14 @@ class ClippedDrawer extends React.Component {
                     open={open}
                     onClose={this.handleClose}
                   >
-                    <MenuItem onClick={this.handleClose}>Profile</MenuItem>
                     <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.logout}>Sign out</MenuItem>
                   </Menu>
-              
+                </div>
+                )}
             </Toolbar>
           </AppBar>
-        {auth && (
+        {store.authenticated && (
           <Drawer
             variant="permanent"
             classes={{

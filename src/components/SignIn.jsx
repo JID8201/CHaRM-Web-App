@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Redirect } from 'react-router';
+import { inject, observer } from "mobx-react";
 
 const styles = theme => ({
   layout: {
@@ -43,6 +44,8 @@ const styles = theme => ({
   },
 });
 
+@inject("store")
+@observer
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
@@ -51,12 +54,14 @@ class SignIn extends React.Component {
         };
     }
 
-    handleOnClick = () => {
-      this.setState({redirect: true})
+    login = () => {
+      this.props.store.authenticate();
     }
+  
 
     render() {
-        if (this.state.redirect) {
+        if (this.props.store.authenticated && !this.props.store.authenticating) {
+          console.log('in redirect')
           return <Redirect push to="/home" />;
         }
         
@@ -88,7 +93,7 @@ class SignIn extends React.Component {
                       variant="raised"
                       color="primary"
                       className={this.props.classes.submit}
-                      onClick={this.handleOnClick}
+                      onClick={this.login}
                     >
                       Sign in
                     </Button>
