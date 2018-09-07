@@ -5,7 +5,6 @@ import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -16,7 +15,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { inject } from 'mobx-react';
-import { observable } from 'mobx';
+import logo from './live-thrive-logo.png';
 
 const drawerWidth = 240;
 
@@ -35,6 +34,16 @@ const styles = theme => ({
   drawerPaper: {
     position: 'relative',
     width: drawerWidth,
+  },
+  logo: {
+    width: '100%',
+    height: 'auto',
+    display: 'block',
+    padding: '7px 0'
+  },
+  iconHolder: {
+    flex: 1,
+    textAlign: 'right'
   },
   content: {
     flexGrow: 1,
@@ -74,11 +83,11 @@ class ClippedDrawer extends React.Component {
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="absolute">
             <Toolbar>
-              <Typography style={{flex: '1'}} variant="title" color="inherit" >
-                Photos
-              </Typography>
+              <div style={{ maxWidth: '186px' }} >
+                <img src={logo} alt="Live Thrive" className={classes.logo} />
+              </div>
               { store.authenticated && (
-                <div>
+                <div className={classes.iconHolder} >
                   <IconButton
                     aria-owns={open ? 'menu-appbar' : null}
                     aria-haspopup="true"

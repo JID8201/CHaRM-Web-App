@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Redirect } from 'react-router';
 import { inject, observer } from "mobx-react";
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   layout: {
@@ -61,7 +62,6 @@ class SignIn extends React.Component {
 
     render() {
         if (this.props.store.authenticated && !this.props.store.authenticating) {
-          console.log('in redirect')
           return <Redirect push to="/home" />;
         }
         
@@ -91,14 +91,15 @@ class SignIn extends React.Component {
                     <Button
                       fullWidth
                       variant="raised"
-                      color="primary"
                       className={this.props.classes.submit}
                       onClick={this.login}
                     >
                       Sign in
                     </Button>
                   </form>
+                  <Link to='/forgot-password' style={{ textDecoration: 'none' }}><Typography variant="subheading" style={{ paddingTop: '20px' }}>Forgot your password?</Typography></Link>
                 </Paper>
+                <Typography variant="subheading" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='create-account' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
               </main>
             </React.Fragment>
           );
