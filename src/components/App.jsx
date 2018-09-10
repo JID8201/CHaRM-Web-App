@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import SignIn from '../pages/SignIn';
 import Home from '../pages/Home';
-import { BrowserRouter as Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import NavSideBar from './NavSideBar';
 import PrivateRoute from './PrivateRoute';
 import { inject, observer } from 'mobx-react';
