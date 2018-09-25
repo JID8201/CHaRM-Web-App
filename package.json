@@ -5,6 +5,8 @@
   "dependencies": {
     "@material-ui/core": "^3.0.2",
     "@material-ui/icons": "^3.0.1",
+    "concurrently": "^4.0.1",
+    "express": "^4.16.3",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.6",
     "prop-types": "^15.6.2",
@@ -16,12 +18,15 @@
     "react-scripts": "1.1.5"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "frontend": "react-app-rewired start",
+    "dev": "concurrently -k \"npm run frontend\" \"npm run backend\"",
     "build": "react-app-rewired build",
+    "backend": "nodemon backend/index.js",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "nodemon": "^1.18.4",
     "react-app-rewired": "^1.6.2"
   }
 }
