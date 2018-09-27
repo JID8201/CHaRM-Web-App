@@ -16,6 +16,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { inject } from 'mobx-react';
 import logo from './live-thrive-logo.png';
+import {withRouter} from 'react-router-dom'
+
 
 const drawerWidth = 240;
 
@@ -55,6 +57,7 @@ const styles = theme => ({
 });
 
 @inject("store")
+@withRouter
 class ClippedDrawer extends React.Component {
   state = {
     anchorEl: null,
@@ -73,6 +76,9 @@ class ClippedDrawer extends React.Component {
     this.props.store.authenticate();
   }
 
+  handleOnClick = () => {
+    this.props.history.push('/recycling-data');
+  }
 
   render() {
     const { classes, children, store } = this.props;
@@ -132,11 +138,11 @@ class ClippedDrawer extends React.Component {
                 </ListItemIcon>
                 <ListItemText primary="Inbox" />
               </ListItem>
-              <ListItem button>
+              <ListItem button onClick={this.handleOnClick}>
                 <ListItemIcon>
                   <StarIcon />
                 </ListItemIcon>
-                <ListItemText primary="Starred" />
+                <ListItemText primary="Data" />
               </ListItem>
             </List>
           </Drawer>
