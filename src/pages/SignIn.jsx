@@ -62,7 +62,7 @@ class SignIn extends React.Component {
 
     render() {
         if (this.props.store.authenticated && !this.props.store.authenticating) {
-          return <Redirect push to="/home" />;
+          return <Redirect push to="/" />;
         }
         
         return (

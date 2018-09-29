@@ -8,15 +8,15 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import StarIcon from '@material-ui/icons/Star';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import { inject } from 'mobx-react';
 import logo from './live-thrive-logo.png';
-import {withRouter} from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
+import History from '@material-ui/icons/History';
+import TrendingUp from '@material-ui/icons/TrendingUp';
 
 
 const drawerWidth = 240;
@@ -76,8 +76,17 @@ class ClippedDrawer extends React.Component {
     this.props.store.authenticate();
   }
 
-  handleOnClick = () => {
-    this.props.history.push('/recycling-data');
+  handleTableOnClick = () => {
+    this.props.history.push('/');
+  }
+
+  handleGraphOnClick = () => {
+    this.props.history.push('/graph');
+  }
+
+  handleMyAccount = () => {
+    this.props.history.push('/profile');
+    this.handleClose();
   }
 
   render() {
@@ -116,7 +125,7 @@ class ClippedDrawer extends React.Component {
                     open={open}
                     onClose={this.handleClose}
                   >
-                    <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                    <MenuItem onClick={this.handleMyAccount}>My account</MenuItem>
                     <MenuItem onClick={this.logout}>Sign out</MenuItem>
                   </Menu>
                 </div>
@@ -132,17 +141,17 @@ class ClippedDrawer extends React.Component {
           >
             <div className={classes.toolbar} />
             <List>
-              <ListItem button>
+              <ListItem button onClick={this.handleTableOnClick}>
                 <ListItemIcon>
-                  <InboxIcon />
+                  <History />
                 </ListItemIcon>
-                <ListItemText primary="Inbox" />
+                <ListItemText primary="Table" />
               </ListItem>
-              <ListItem button onClick={this.handleOnClick}>
+              <ListItem button onClick={this.handleGraphOnClick}>
                 <ListItemIcon>
-                  <StarIcon />
+                  <TrendingUp />
                 </ListItemIcon>
-                <ListItemText primary="Data" />
+                <ListItemText primary="Graph" />
               </ListItem>
             </List>
           </Drawer>

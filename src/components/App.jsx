@@ -9,6 +9,8 @@ import { inject, observer } from 'mobx-react';
 import CreateAccount from '../pages/CreateAccount';
 import ForgotPassword from '../pages/ForgotPassword';
 import RecyclingData from '../pages/RecyclingData';
+import GraphData from '../pages/GraphData';
+import ProfilePage from '../pages/ProfilePage';
 
 @inject("store")
 @withRouter
@@ -23,8 +25,9 @@ class App extends Component {
                 <Route exact path="/login" component={SignIn} />
                 <Route exact path="/create-account" component={CreateAccount} />
                 <Route exact path="/forgot-password" component={ForgotPassword} />
-                <PrivateRoute exact path='/home' component={Home} />
-                <PrivateRoute exact path="/recycling-data" component={RecyclingData}/>
+                <PrivateRoute exact path="/graph" component={GraphData}/>
+                <PrivateRoute exact path="/profile" component={ProfilePage} />
+                <PrivateRoute path="/" component={RecyclingData} />
             </Switch>
           </NavSideBar>
       </div>

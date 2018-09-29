@@ -21,10 +21,6 @@ const styles = theme => ({
 });
 
 class CenteredGrid extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  
     render() {
         const { classes, children } = this.props;
         return (
