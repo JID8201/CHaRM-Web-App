@@ -24,7 +24,7 @@ app.get('/material/:type',
     const type = String(req.params.type);
 
     var output;
-    ordersRef.orderByChild("type").equalTo(type)
+    ordersRef.orderByChild("materialType").equalTo(type)
       .on("value", function(snapshot) {
         output = snapshot.val();
       });
@@ -35,10 +35,10 @@ app.get('/material/:type',
 // Retrieve orders by originating zip code
 app.get('/location/:zip',
   (req, res) => {
-    const zipCode = String(req.params.zip);
+    const zipCode = parseInt(req.params.zip);
 
     var output;
-    ordersRef.orderByChild("zip").equalTo(zipCode)
+    ordersRef.orderByChild("zipCode").equalTo(zipCode)
       .on("value", function(snapshot) {
         output = snapshot.val();
       });
@@ -52,7 +52,7 @@ app.get("/date/:year-month-day",
     const date = parseInt(req.params.year-month-day);
 
     var output;
-    ordersRef.orderByChild("date").equalTo(date)
+    ordersRef.orderByChild("timeStamp").equalTo(date)
       .on("value", function(snapshot) {
         output = snapshot.val();
       });
@@ -66,9 +66,8 @@ app.get("/date/:from_ymd/:to_ymd",
     const from_date = parseInt(req.params.from_ymd);
     const to_date = parseInt(req.params.to_ymd)
 
-
     var output;
-    ordersRef.orderByChild("date").startAt(from_date)
+    ordersRef.orderByChild("timeStamp").startAt(from_date)
       .endAt(to_date).on("value", function(snapshot) {
         output = snapshot.val();
       });

@@ -1,6 +1,5 @@
 API reference
 
-
 /all : retrieve all data in the database
 
 /material/type : retrieve all orders of material "type"
@@ -17,4 +16,3 @@ API reference
 (#TODO this api will need to be updated in the future. Firebase wont allow filtering data on multiple attributes. I will switch this api over to mongoDB in the future, but the API calls will stay relativly the same.)
 
 @Olivia Sorry this is a mess. If you get some basic stuff implemented on the web app side (showing graphs of total amount of material processed by type or date range for example) then I will smooth things over when I make the switch to mongo
-
