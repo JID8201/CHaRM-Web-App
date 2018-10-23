@@ -1,6 +1,7 @@
 import React from 'react';
-import { PieChart, Pie, Cell, Sector, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Sector, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import {withRouter} from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 @withRouter
 class Graph extends React.Component {
@@ -12,10 +13,10 @@ class Graph extends React.Component {
         }
     }
 
-    renderActiveShape = (props) => {
+    renderActiveShape = (pieChart) => {
         const RADIAN = Math.PI / 180;
         const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-          fill, payload, percent, value } = props;
+          fill, payload, percent, value } = pieChart;
         const sin = Math.sin(-RADIAN * midAngle);
         const cos = Math.cos(-RADIAN * midAngle);
         const sx = cx + (outerRadius + 10) * cos;
@@ -70,12 +71,6 @@ class Graph extends React.Component {
         });
     }
 
-    // donut = (data) => {
-    //     return (
-    //         <Doughnut data={data} width='600 px' height='300 px'/>
-    //     )
-    // }
-
     pie = (data) => {
         const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -88,8 +83,8 @@ class Graph extends React.Component {
                     data={data} 
                     cx={300} 
                     cy={200} 
-                    innerRadius={60}
-                    outerRadius={80} 
+                    innerRadius={100}
+                    outerRadius={120} 
                     fill="#8884d8"
                     onMouseEnter={this.onPieEnter}
                 >
@@ -101,13 +96,6 @@ class Graph extends React.Component {
         )
     }
 
-    // bar = (graphData) => {
-    //     console.log(graphData)
-    //     return (
-    //         <Bar data={graphData} width='600 px' height='300 px' />
-    //     )
-    // }
-
     bar = (data) => {
         const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -117,7 +105,6 @@ class Graph extends React.Component {
                 <XAxis dataKey="name"/>
                 <YAxis/>
                 <Tooltip/>
-                <Legend />
                 <Bar dataKey="value" fill="#8884d8" >
                 {
                     data.map((entry, i) => <Cell key={i} fill={COLORS[i % COLORS.length]}/>)
@@ -166,4 +153,7 @@ class Graph extends React.Component {
     }
 }
 
+Graph.propTypes = {
+    graph: PropTypes.string
+}
 export default Graph;

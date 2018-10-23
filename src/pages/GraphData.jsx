@@ -1,7 +1,18 @@
 import React from 'react';
 import Graph from '../components/Graph';
 import {Button} from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
+
+const styles = theme => ({
+    buttonContainer: {
+        float: 'right'
+    },
+    button: {
+        margin: '5px',
+        zIndex: '1'
+    }
+})
 class GraphData extends React.Component {
     constructor(props) {
         super(props)
@@ -15,14 +26,33 @@ class GraphData extends React.Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
             <div>
-                <Button onClick={() => this.handleGraphChange('donut')}>Donut</Button>
-                <Button onClick={() => this.handleGraphChange('bar')}>Bar</Button>
+                <div className={classes.buttonContainer}>
+                    <Button 
+                        className={classes.button}
+                        variant="contained" 
+                        color='secondary' 
+                        onClick={() => this.handleGraphChange('donut')} 
+                        disabled={this.state.graph === 'donut'}
+                    >
+                    Donut
+                    </Button>
+                    <Button 
+                        className={classes.button}
+                        variant="contained" 
+                        color='secondary' 
+                        onClick={() => this.handleGraphChange('bar')} 
+                        disabled={this.state.graph === 'bar'}
+                    >
+                    Bar
+                    </Button>
+                </div>
                 <Graph graph={this.state.graph}/>
             </div>
         );
     }
 }
 
-export default GraphData;
+export default withStyles(styles)(GraphData);
