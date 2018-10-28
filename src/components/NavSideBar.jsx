@@ -56,7 +56,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-@inject("store")
+@inject("appState")
 @withRouter
 class ClippedDrawer extends React.Component {
   state = {
@@ -73,7 +73,7 @@ class ClippedDrawer extends React.Component {
 
   logout = () => {
     this.setState({ anchorEl: null});
-    this.props.store.authenticate();
+    this.props.appState.authenticate();
   }
 
   handleTableOnClick = () => {
@@ -90,7 +90,7 @@ class ClippedDrawer extends React.Component {
   }
 
   render() {
-    const { classes, children, store } = this.props;
+    const { classes, children, appState } = this.props;
     const { anchorEl } = this.state;
     const open = Boolean(anchorEl);
 
@@ -101,7 +101,7 @@ class ClippedDrawer extends React.Component {
               <div style={{ maxWidth: '186px' }} >
                 <img src={logo} alt="Live Thrive" className={classes.logo} />
               </div>
-              { store.authenticated && (
+              { appState.authenticated && (
                 <div className={classes.iconHolder} >
                   <IconButton
                     aria-owns={open ? 'menu-appbar' : null}
@@ -132,7 +132,7 @@ class ClippedDrawer extends React.Component {
                 )}
             </Toolbar>
           </AppBar>
-        {store.authenticated && (
+        {appState.authenticated && (
           <Drawer
             variant="permanent"
             classes={{

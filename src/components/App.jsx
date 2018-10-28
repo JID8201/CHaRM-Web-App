@@ -12,12 +12,11 @@ import RecyclingData from '../pages/RecyclingData';
 import GraphData from '../pages/GraphData';
 import ProfilePage from '../pages/ProfilePage';
 
-@inject("store")
+@inject("appState")
 @withRouter
 @observer
 class App extends Component {
   render() {
-    console.log(this.props.store.authenticated);
     return (
       <div>
           <NavSideBar>

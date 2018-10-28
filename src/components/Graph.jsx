@@ -3,7 +3,6 @@ import { PieChart, Pie, Cell, Sector, BarChart, Bar, XAxis, YAxis, Tooltip } fro
 import {withRouter} from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-@withRouter
 class Graph extends React.Component {
 
     constructor(props) {
@@ -65,7 +64,6 @@ class Graph extends React.Component {
     }
     
     onPieEnter = (data, index) => {
-        console.log('index: ', index)
         this.setState({
           activeIndex: index,
         });

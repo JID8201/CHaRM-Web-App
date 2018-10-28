@@ -45,7 +45,7 @@ const styles = theme => ({
   },
 });
 
-@inject("store")
+@inject("appState")
 @observer
 class SignIn extends React.Component {
     constructor(props) {
@@ -56,15 +56,14 @@ class SignIn extends React.Component {
     }
 
     login = () => {
-      this.props.store.authenticate();
+      this.props.appState.authenticate();
     }
   
 
     render() {
-        if (this.props.store.authenticated && !this.props.store.authenticating) {
+        if (this.props.appState.authenticated && !this.props.appState.authenticating) {
           return <Redirect push to="/" />;
         }
-        
         return (
             <React.Fragment>
               <CssBaseline />
