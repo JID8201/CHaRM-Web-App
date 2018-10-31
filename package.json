@@ -9,6 +9,7 @@
     "clean": "rm -rf build && mkdir build",
     "build": "react-app-rewired build && npm run build-backend && npm run copy",
     "start": "node build/server.js",
+    "heroku-postbuild": "npm i "
     "build-backend": "babel ./backend -d build/backend",
     "copy": "cp server.js build/",
     "test": "react-app-rewired test --env=jsdom",
@@ -35,6 +36,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.6.0",
     "react-app-rewire-mobx": "^1.0.8",
+    "react-app-rewired": "^1.6.2",
     "react-datepicker": "^1.7.0",
     "react-dates": "^18.1.1",
     "react-dom": "^16.6.0",
@@ -55,7 +57,6 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
-    "nodemon": "^1.18.4",
-    "react-app-rewired": "^1.6.2"
+    "nodemon": "^1.18.4"
   }
 }
