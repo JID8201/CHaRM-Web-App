@@ -7,7 +7,7 @@ var RecyclingSchema = new mongoose.Schema({
     },
     zip: {
         type: Number,
-        min: 00000,
+        min: 0o0000,
         max: 99999,
         required: true
     },
