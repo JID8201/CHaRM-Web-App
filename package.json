@@ -8,7 +8,7 @@
     "dev": "concurrently -k \"npm run frontend\" \"npm run backend\"",
     "clean": "rm -rf build && mkdir build",
     "build": "react-app-rewired build && npm run build-backend && npm run copy",
-    "start": "node build/server.js",
+    "start": "npm run build && node build/server.js",
     "heroku-postbuild": "npm i react-app-rewired",
     "build-backend": "babel ./backend -d build/backend",
     "copy": "cp server.js build/",
