@@ -8,7 +8,7 @@
     "dev": "concurrently -k \"npm run frontend\" \"npm run backend\"",
     "clean": "rm -rf build && mkdir build",
     "build": "react-app-rewired build && npm run build-backend && npm run copy",
-    "start": "NODE_ENV=production npm run build node build/server.js",
+    "start": "node build/server.js",
     "build-backend": "babel ./backend -d build/backend",
     "copy": "cp server.js build/",
     "test": "react-app-rewired test --env=jsdom",
