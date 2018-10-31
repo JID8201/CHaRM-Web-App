@@ -1,25 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { inject } from 'mobx-react';
-import logo from './live-thrive-logo.png';
-import {withRouter} from 'react-router-dom';
-import History from '@material-ui/icons/History';
-import TrendingUp from '@material-ui/icons/TrendingUp';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import IconButton from '@material-ui/core/IconButton'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import { inject } from 'mobx-react'
+import logo from '../assets/images/live-thrive-logo.png'
+import {withRouter} from 'react-router-dom'
+import History from '@material-ui/icons/History'
+import TrendingUp from '@material-ui/icons/TrendingUp'
+import {PropTypes as MobxPropTypes} from 'mobx-react'
 
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
@@ -54,9 +55,9 @@ const styles = theme => ({
     minWidth: 0, // So the Typography noWrap works
   },
   toolbar: theme.mixins.toolbar,
-});
+})
 
-@inject("appState")
+@inject('appState')
 @withRouter
 class ClippedDrawer extends React.Component {
   state = {
@@ -64,74 +65,74 @@ class ClippedDrawer extends React.Component {
   };
 
   handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget })
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null })
   };
 
   logout = () => {
-    this.setState({ anchorEl: null});
-    this.props.appState.authenticate();
+    this.setState({ anchorEl: null})
+    this.props.appState.authenticate()
   }
 
   handleTableOnClick = () => {
-    this.props.history.push('/');
+    this.props.history.push('/')
   }
 
   handleGraphOnClick = () => {
-    this.props.history.push('/graph');
+    this.props.history.push('/graph')
   }
 
   handleMyAccount = () => {
-    this.props.history.push('/profile');
-    this.handleClose();
+    this.props.history.push('/profile')
+    this.handleClose()
   }
 
   render() {
-    const { classes, children, appState } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { classes, children, appState } = this.props
+    const { anchorEl } = this.state
+    const open = Boolean(anchorEl)
 
     return (
       <div className={classes.root}>
         <AppBar className={classes.appBar} position="absolute">
-            <Toolbar>
-              <div style={{ maxWidth: '186px' }} >
-                <img src={logo} alt="Live Thrive" className={classes.logo} />
+          <Toolbar>
+            <div style={{ maxWidth: '186px' }} >
+              <img src={logo} alt="Live Thrive" className={classes.logo} />
+            </div>
+            { appState.authenticated && (
+              <div className={classes.iconHolder} >
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : null}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={this.handleMyAccount}>My account</MenuItem>
+                  <MenuItem onClick={this.logout}>Sign out</MenuItem>
+                </Menu>
               </div>
-              { appState.authenticated && (
-                <div className={classes.iconHolder} >
-                  <IconButton
-                    aria-owns={open ? 'menu-appbar' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={open}
-                    onClose={this.handleClose}
-                  >
-                    <MenuItem onClick={this.handleMyAccount}>My account</MenuItem>
-                    <MenuItem onClick={this.logout}>Sign out</MenuItem>
-                  </Menu>
-                </div>
-                )}
-            </Toolbar>
-          </AppBar>
+            )}
+          </Toolbar>
+        </AppBar>
         {appState.authenticated && (
           <Drawer
             variant="permanent"
@@ -161,12 +162,15 @@ class ClippedDrawer extends React.Component {
           {children}
         </main>
       </div>
-    );
+    )
   }
 }
 
 ClippedDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+  history: PropTypes.array,
+  children: PropTypes.element.isRequired,
+  appState: MobxPropTypes.observableArray
+}
 
-export default withStyles(styles)(ClippedDrawer);
+export default withStyles(styles)(ClippedDrawer)

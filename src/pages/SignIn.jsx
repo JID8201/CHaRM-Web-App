@@ -1,17 +1,19 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockIcon from '@material-ui/icons/LockOutlined';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import { Redirect } from 'react-router';
-import { inject, observer } from "mobx-react";
-import { Link } from 'react-router-dom';
+import React from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import FormControl from '@material-ui/core/FormControl'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import LockIcon from '@material-ui/icons/LockOutlined'
+import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import withStyles from '@material-ui/core/styles/withStyles'
+import { Redirect } from 'react-router'
+import { inject, observer } from 'mobx-react'
+import { Link } from 'react-router-dom'
+import {PropTypes as MobxPropTypes} from 'mobx-react'
+import PropTypes from 'prop-types'
 
 const styles = theme => ({
   layout: {
@@ -43,66 +45,71 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
-});
+})
 
-@inject("appState")
+@inject('appState')
 @observer
 class SignIn extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          redirect: false
-        };
+  constructor(props) {
+    super(props)
+    this.state = {
+      redirect: false
     }
+  }
 
     login = () => {
-      this.props.appState.authenticate();
+      this.props.appState.authenticate()
     }
-  
+
 
     render() {
-        if (this.props.appState.authenticated && !this.props.appState.authenticating) {
-          return <Redirect push to="/" />;
-        }
-        return (
-            <React.Fragment>
-              <CssBaseline />
-              <main className={this.props.classes.layout}>
-                <Paper className={this.props.classes.paper}>
-                  <Avatar className={this.props.classes.avatar}>
-                    <LockIcon />
-                  </Avatar>
-                  <Typography variant="headline">Sign in</Typography>
-                  <form className={this.props.classes.form}>
-                    <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="email">Email Address</InputLabel>
-                      <Input id="email" name="email" autoComplete="email" autoFocus />
-                    </FormControl>
-                    <FormControl margin="normal" required fullWidth>
-                      <InputLabel htmlFor="password">Password</InputLabel>
-                      <Input
-                        name="password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                      />
-                    </FormControl>
-                    <Button
-                      fullWidth
-                      variant="raised"
-                      className={this.props.classes.submit}
-                      onClick={this.login}
-                    >
+      if (this.props.appState.authenticated && !this.props.appState.authenticating) {
+        return <Redirect push to="/" />
+      }
+      return (
+        <React.Fragment>
+          <CssBaseline />
+          <main className={this.props.classes.layout}>
+            <Paper className={this.props.classes.paper}>
+              <Avatar className={this.props.classes.avatar}>
+                <LockIcon />
+              </Avatar>
+              <Typography variant="h5">Sign in</Typography>
+              <form className={this.props.classes.form}>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="email">Email Address</InputLabel>
+                  <Input id="email" name="email" autoComplete="email" autoFocus />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="password">Password</InputLabel>
+                  <Input
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                  />
+                </FormControl>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  className={this.props.classes.submit}
+                  onClick={this.login}
+                >
                       Sign in
-                    </Button>
-                  </form>
-                  <Link to='/forgot-password' style={{ textDecoration: 'none' }}><Typography variant="subheading" style={{ paddingTop: '20px' }}>Forgot your password?</Typography></Link>
-                </Paper>
-                <Typography variant="subheading" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='create-account' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
-              </main>
-            </React.Fragment>
-          );
+                </Button>
+              </form>
+              <Typography variant="subtitle1" style={{ paddingTop: '20px' }}><Link to='/forgot-password' style={{ color: 'black', textDecoration: 'none' }}>Forgot your password?</Link></Typography>
+            </Paper>
+            <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='create-account' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
+          </main>
+        </React.Fragment>
+      )
     }
 }
 
-export default withStyles(styles)(SignIn);
+SignIn.propTypes = {
+  classes: PropTypes.object.isRequired,
+  appState: MobxPropTypes.observableArray
+}
+
+export default withStyles(styles)(SignIn)
