@@ -1,24 +1,27 @@
-import { observable, action } from "mobx";
+import { observable, action } from 'mobx'
 
-export default class AppState {
+export class AppState {
     @observable authenticated;
     @observable authenticating;
-  
-  
+    @observable recyclingData;
+    @observable state = 'pending' // "pending" / "done" / "error"
+
     constructor() {
-      this.authenticated = false;
-      this.authenticating = false;
+      this.authenticated = false
+      this.authenticating = false
     }
 
-    @action authenticate() {
-        return new Promise((resolve, reject) => {
-            this.authenticating = true;
-            setTimeout(() => {
-                this.authenticated = !this.authenticated;
-                this.authenticating = false;
-                console.log(this.authenticated);
-                resolve(this.authenticated);
-            }, 0);
-        });
+    @action
+    authenticate() {
+      return new Promise((resolve, reject) => {
+        this.authenticating = true
+        setTimeout(() => {
+          this.authenticated = !this.authenticated
+          this.authenticating = false
+          resolve(this.authenticated)
+        }, 0)
+      })
     }
 }
+
+export default new AppState()

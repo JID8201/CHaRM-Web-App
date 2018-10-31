@@ -1,6 +1,6 @@
- const Recycling = require('mongoose').model('Recycling');
+const Recycling = require('mongoose').model('Recycling');
 
- module.exports.create = (req, res, next) => {
+module.exports.create = (req, res, next) => {
     if (!req.body.type) {
         return next(new Error('type of recycled item is required'))
     }
@@ -21,14 +21,59 @@
             res.locals.error = {
                 status: 500, 
                 msg: 'error: ' + err
-            };
-            return next();
+            }
+            return next()
         } else {
             res.locals.data = {
                 recycling: result,
                 msg: 'Recycling data successfully added'
-            };
-            return next();
+            }
+            return next()
         }
     })
- }
+}
+
+module.exports.getDateRange = (req, res, next) => {
+    // this is bad, shouldn't throw error should return dates in the given range or all
+    if (!req.query.startDate) {
+        return next(new Error('Starting date range required'))
+    }
+    if (!req.query.endDate) {
+        return next(new Error('Ending date range required'))
+    }
+    const start = new Date(req.query.startDate)
+    const end = new Date(req.query.endDate)
+    Recycling.find({created_at: {"$gte": start, "$lte": end}},
+        (err, result) => {
+            if (err) {
+                // we done fucked up bad
+                res.locals.error = {
+                    status: 500,
+                    msg: 'error: ' + err
+                }
+                return next()
+            } else {
+                res.locals.data = {
+                    recycling: result
+                }
+                return next()
+            }
+        }
+    )
+}
+
+module.exports.get = (req, res, next) => {
+    Recycling.find({}, (err, result) => {
+        if (err) {
+            res.locals.error = {
+                status: 500,
+                msg: 'error: ' + err
+            }
+            return next()
+        } else {
+            res.locals.data = {
+                recycling: result
+            }
+        }
+    })
+}
