@@ -7,11 +7,16 @@
     "backend": "nodemon server.js",
     "dev": "concurrently -k \"npm run frontend\" \"npm run backend\"",
     "clean": "rm -rf build && mkdir build",
-    "build": "react-app-rewired build && npm run build-backend && npm run copy",
+    "build": "NODE_ENV=production react-app-rewired build && npm run build-backend && npm run copy",
+    "start": "node build/server.js",
     "build-backend": "babel ./backend -d build/backend",
     "copy": "cp server.js build/",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject"
+  },
+  "engines": {
+    "node": "10.10.0",
+    "npm": "6.4.1"
   },
   "dependencies": {
     "@material-ui/core": "^3.3.2",
