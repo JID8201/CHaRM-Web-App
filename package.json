@@ -7,13 +7,13 @@
     "backend": "nodemon server.js",
     "dev": "concurrently -k \"npm run frontend\" \"npm run backend\"",
     "clean": "rm -rf build && mkdir build",
-    "build": "react-app-rewired build && npm run build-backend && npm run copy",
+    "build": "npm run clean && react-app-rewired build && npm run build-backend && npm run copy",
     "start": "node build/server.js",
     "build-backend": "babel ./backend -d build/backend",
     "copy": "cp server.js build/",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
-    "postinstall": "npm run build"
+    "postinstall": "NODE_ENV=production npm run build"
   },
   "engines": {
     "node": "10.10.0",
@@ -50,13 +50,7 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
-    "babel-eslint": "^10.0.1",
     "concurrently": "^4.0.1",
-    "eslint": "^5.8.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-react": "^7.11.1",
     "nodemon": "^1.18.4"
   }
 }
