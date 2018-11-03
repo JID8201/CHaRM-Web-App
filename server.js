@@ -10,7 +10,10 @@ const path = require('path')
 
 
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGO_URL)
+mongoose.connect(process.env.MONGO_URL, {
+  useCreateIndex: true,
+  useNewUrlParser: true
+})
 
 const db = mongoose.connection
 const api = require('./backend/routes')
