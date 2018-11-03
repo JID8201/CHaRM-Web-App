@@ -6,6 +6,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const PORT = process.env.PORT || 3001
+const path = require('path')
 
 
 const mongoose = require('mongoose')
@@ -16,19 +17,22 @@ const api = require('./backend/routes')
 
 app.use(cors())
 app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, '/')))
 app.use('/api', api)
 db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', () => {
-    // connected
-    console.log('connected')
-})
 
-app.get('/*', (req, res) => {
-    res.send('Hello')
-})
-  
+if (process.env.NODE_ENV === 'production') {
+  app.get('/*', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+  })
+} else {
+  app.get('/*', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html')
+  })
+}
+
 app.listen(PORT, error => {
-    error
+  error
     ? console.error(error)
     : console.info(`==> 🌎 Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`)
 })
