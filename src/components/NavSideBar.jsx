@@ -9,8 +9,11 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
+import Hidden from '@material-ui/core/Hidden'
+import Divider from '@material-ui/core/Divider'
 import Menu from '@material-ui/core/Menu'
 import { inject } from 'mobx-react'
 import logo from '../assets/images/live-thrive-logo.png'
@@ -18,25 +21,26 @@ import {withRouter} from 'react-router-dom'
 import History from '@material-ui/icons/History'
 import TrendingUp from '@material-ui/icons/TrendingUp'
 import {PropTypes as MobxPropTypes} from 'mobx-react'
-
+import CssBaseline from '@material-ui/core/CssBaseline'
 
 const drawerWidth = 240
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    height: '100vh',
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
     display: 'flex',
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
+  appBar: {
+    marginLeft: drawerWidth,
+    zIndex: theme.zIndex.drawer + 1,
+    // [theme.breakpoints.up('sm')]: {
+    //   width: `calc(100% - ${drawerWidth}px)`,
+    // },
   },
   logo: {
     width: '100%',
@@ -44,17 +48,20 @@ const styles = theme => ({
     display: 'block',
     padding: '7px 0'
   },
-  iconHolder: {
-    flex: 1,
-    textAlign: 'right'
+  menuButton: {
+    marginRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3,
-    minWidth: 0, // So the Typography noWrap works
   },
-  toolbar: theme.mixins.toolbar,
 })
 
 @inject('appState')
@@ -62,6 +69,11 @@ const styles = theme => ({
 class ClippedDrawer extends React.Component {
   state = {
     anchorEl: null,
+    mobileOpen: false
+  };
+
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }))
   };
 
   handleMenu = event => {
@@ -91,14 +103,44 @@ class ClippedDrawer extends React.Component {
   }
 
   render() {
-    const { classes, children, appState } = this.props
+    const { classes, children, appState, theme } = this.props
     const { anchorEl } = this.state
     const open = Boolean(anchorEl)
 
+    const drawer = (
+      <div>
+        <div className={classes.toolbar} />
+        <Divider />
+        <List>
+          <ListItem button onClick={this.handleTableOnClick}>
+            <ListItemIcon>
+              <History />
+            </ListItemIcon>
+            <ListItemText primary="Table" />
+          </ListItem>
+          <ListItem button onClick={this.handleGraphOnClick}>
+            <ListItemIcon>
+              <TrendingUp />
+            </ListItemIcon>
+            <ListItemText primary="Graph" />
+          </ListItem>
+        </List>
+      </div>
+    )
+
     return (
       <div className={classes.root}>
-        <AppBar className={classes.appBar} position="absolute">
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
             <div style={{ maxWidth: '186px' }} >
               <img src={logo} alt="Live Thrive" className={classes.logo} />
             </div>
@@ -134,28 +176,37 @@ class ClippedDrawer extends React.Component {
           </Toolbar>
         </AppBar>
         {appState.authenticated && (
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div className={classes.toolbar} />
-            <List>
-              <ListItem button onClick={this.handleTableOnClick}>
-                <ListItemIcon>
-                  <History />
-                </ListItemIcon>
-                <ListItemText primary="Table" />
-              </ListItem>
-              <ListItem button onClick={this.handleGraphOnClick}>
-                <ListItemIcon>
-                  <TrendingUp />
-                </ListItemIcon>
-                <ListItemText primary="Graph" />
-              </ListItem>
-            </List>
-          </Drawer>
+          <nav className={classes.drawer}>
+            {/* The implementation can be swap with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="css">
+              <Drawer
+                container={this.props.container}
+                variant="temporary"
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={this.state.mobileOpen}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
         )}
         <main className={classes.content}>
           <div className={classes.toolbar} />
@@ -173,4 +224,4 @@ ClippedDrawer.propTypes = {
   appState: MobxPropTypes.observableArray
 }
 
-export default withStyles(styles)(ClippedDrawer)
+export default withStyles(styles, { withTheme: true })(ClippedDrawer)
