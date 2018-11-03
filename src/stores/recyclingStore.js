@@ -18,7 +18,7 @@ export class RecyclingStore {
       }
       this.state = 'pending'
       try {
-        const uri = 'http://localhost:3001/api/recycling?startDate=' + startDate.format('YYYY-MM-DD') + '&endDate=' + endDate.format('YYYY-MM-DD')
+        const uri = '/api/recycling?startDate=' + startDate.format('YYYY-MM-DD') + '&endDate=' + endDate.format('YYYY-MM-DD')
         const response = yield fetch(uri)
         const data = yield response.json()
         this.recyclingData = this.originalData = data.recycling
