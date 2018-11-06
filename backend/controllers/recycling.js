@@ -112,12 +112,13 @@ module.exports.getYearCSV = (req, res, next) => {
 
             var i;
             for (i = 0; i < result.length; i++) { 
+                entry = result[i]
                 csvStream.write({
-                    Type: result.type,
-                    Zip : result.zip,
-                    Amount : result.amount,
-                    Notes: result.notes,
-                    Timestamps: result.timestamps
+                    Type: entry.type,
+                    Zip : entry.zip,
+                    Amount : entry.amount,
+                    Notes: entry.notes,
+                    Timestamps: entry.created_at
                 })
             }
             csvStream.end()
