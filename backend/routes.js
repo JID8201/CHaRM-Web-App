@@ -6,6 +6,8 @@ router.post('/recycling', recycling.create)
 // router.get('/recycling', recycling.get)
 router.get('/recycling', recycling.getDateRange)
 
+router.get('/yearcsv', recycling.getYearCSV)
+
 router.use((req, res, next) => {
   if (res.locals.data) {
     let response = Object.assign({}, res.locals.data, {

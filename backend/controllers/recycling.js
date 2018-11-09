@@ -1,3 +1,4 @@
+const csv = require('fast-csv')
 const Recycling = require('mongoose').model('Recycling')
 
 module.exports.create = (req, res, next) => {
@@ -76,4 +77,48 @@ module.exports.get = (req, res, next) => {
       }
     }
   })
+}
+
+module.exports.getYearCSV = (req, res, next) => {
+  if (!req.query.year) {
+    return next(new Error('Please select which year of data to download'))
+  }
+
+  const csvStream = csv.createWriteStream({
+    headers: true
+  })
+
+  const year = parseInt(req.query.year)
+  const start = new Date(year, 0)
+  const end = new Date(year + 1, 0)
+
+  res.setHeader('content-type', 'text/csv')
+
+  csvStream.pipe(res)
+  Recycling
+    .find({created_at: {'$gte': start, '$lte': end}})
+    .exec((err, result) => {
+      if (err) {
+        res.locals.error = {
+          status: 404,
+          msg: 'Could not find anything'
+        }
+        csvStream.end()
+        return next()
+      }
+      let filename = year.toString() + '.csv'
+      let header = 'attachment; filename=' + filename
+      res.setHeader('Content-disposition', header)
+
+      for (let entry of result) {
+        csvStream.write({
+          Type: entry.type,
+          Zip : entry.zip,
+          Amount : entry.amount,
+          Notes: entry.notes,
+          Timestamps: entry.created_at
+        })
+      }
+      csvStream.end()
+    })
 }
