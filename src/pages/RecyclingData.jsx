@@ -29,6 +29,9 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
+  selection: {
+    padding: '0 0 20px 0'
+  }
 })
 
 @inject('recyclingStore')
@@ -79,7 +82,7 @@ class RecyclingData extends React.Component {
       const { classes } = this.props
       return (
         <div>
-          <div>
+          <div className={classes.selection}>
             <DateRangePicker
               startDate={this.state.startDate} // momentPropTypes.momentObj or null,
               startDateId="start-input" // PropTypes.string.isRequired,

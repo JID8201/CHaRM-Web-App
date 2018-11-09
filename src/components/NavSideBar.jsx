@@ -19,9 +19,10 @@ import { inject } from 'mobx-react'
 import logo from '../assets/images/live-thrive-logo.png'
 import {withRouter} from 'react-router-dom'
 import History from '@material-ui/icons/History'
-import TrendingUp from '@material-ui/icons/TrendingUp'
+import Timeline from '@material-ui/icons/Timeline'
 import {PropTypes as MobxPropTypes} from 'mobx-react'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import TableChart from '@material-ui/icons/TableChartOutlined'
 
 const drawerWidth = 240
 
@@ -38,6 +39,7 @@ const styles = theme => ({
   appBar: {
     marginLeft: drawerWidth,
     zIndex: theme.zIndex.drawer + 1,
+    display: 'flex',
     // [theme.breakpoints.up('sm')]: {
     //   width: `calc(100% - ${drawerWidth}px)`,
     // },
@@ -60,12 +62,16 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: '20px'
   },
+  iconHolder: {
+    flex: 1,
+    textAlign: 'right'
+  }
 })
 
 @inject('appState')
-@withRouter
+@withRouter // This lets it switch between components. It uses the props.history!!!!!
 class ClippedDrawer extends React.Component {
   state = {
     anchorEl: null,
@@ -102,6 +108,10 @@ class ClippedDrawer extends React.Component {
     this.handleClose()
   }
 
+  handleExportClick = () => {
+    this.props.history.push('/export')
+  }
+
   render() {
     const { classes, children, appState, theme } = this.props
     const { anchorEl } = this.state
@@ -114,15 +124,21 @@ class ClippedDrawer extends React.Component {
         <List>
           <ListItem button onClick={this.handleTableOnClick}>
             <ListItemIcon>
-              <History />
+              <TableChart />
             </ListItemIcon>
             <ListItemText primary="Table" />
           </ListItem>
           <ListItem button onClick={this.handleGraphOnClick}>
             <ListItemIcon>
-              <TrendingUp />
+              <Timeline />
             </ListItemIcon>
             <ListItemText primary="Graph" />
+          </ListItem>
+          <ListItem button onClick={this.handleExportClick}>
+            <ListItemIcon>
+              <History />
+            </ListItemIcon>
+            <ListItemText primary="Export" />
           </ListItem>
         </List>
       </div>
@@ -220,8 +236,9 @@ class ClippedDrawer extends React.Component {
 ClippedDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.array,
-  children: PropTypes.element.isRequired,
-  appState: MobxPropTypes.observableArray
+  children: PropTypes.object.isRequired,
+  appState: MobxPropTypes.observableArray,
+  theme: PropTypes.object.isRequired
 }
 
 export default withStyles(styles, { withTheme: true })(ClippedDrawer)
