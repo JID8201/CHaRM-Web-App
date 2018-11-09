@@ -10,6 +10,9 @@ import ForgotPassword from './ForgotPassword'
 import RecyclingData from './RecyclingData'
 import GraphData from './GraphData'
 import ProfilePage from './ProfilePage'
+import { hot } from 'react-hot-loader'
+import Export from './Export'
+import MapContainer from './MapContainer'
 
 @inject('appState')
 @withRouter
@@ -25,6 +28,8 @@ class App extends Component {
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <PrivateRoute exact path="/graph" component={GraphData}/>
             <PrivateRoute exact path="/profile" component={ProfilePage} />
+            <PrivateRoute exact path="/export" component={Export} />
+            <PrivateRoute exact path="/map" component={MapContainer} />
             <PrivateRoute path="/" component={RecyclingData} />
           </Switch>
         </NavSideBar>
@@ -33,4 +38,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default hot(module)(App)
