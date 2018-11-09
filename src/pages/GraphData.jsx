@@ -38,7 +38,7 @@ class GraphData extends React.Component {
               onClick={() => this.handleGraphChange('donut')}
               disabled={this.state.graph === 'donut'}
             >
-                    Donut
+            Donut
             </Button>
             <Button
               className={classes.button}
@@ -47,7 +47,7 @@ class GraphData extends React.Component {
               onClick={() => this.handleGraphChange('bar')}
               disabled={this.state.graph === 'bar'}
             >
-                    Bar
+            Bar
             </Button>
           </div>
           <Graph graph={this.state.graph}/>
