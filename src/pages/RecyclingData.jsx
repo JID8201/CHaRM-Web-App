@@ -38,91 +38,89 @@ const styles = theme => ({
 @withRouter
 @observer
 class RecyclingData extends React.Component {
-    data = []
-
-    constructor (props) {
-      super(props)
-      this.state = {
-        focusedInput: null,
-        startDate: null,
-        endDate: null,
-        filter: '',
-      }
+  constructor (props) {
+    super(props)
+    this.state = {
+      focusedInput: null,
+      startDate: null,
+      endDate: null,
+      filter: '',
     }
+  }
 
-    onDatesChange = ({ startDate, endDate }) => {
-      this.setState({ startDate: startDate, endDate: endDate }, this.getNewDataByDates)
-    }
+  onDatesChange = ({ startDate, endDate }) => {
+    this.setState({ startDate: startDate, endDate: endDate }, this.getNewDataByDates)
+  }
 
-    getNewDataByDates() {
-      this.props.recyclingStore.getDataByDate(this.state.startDate, this.state.endDate)
-      when(
-        () => this.props.recyclingStore.state === 'done',
-        () => this.props.recyclingStore.filteredDataByType(this.state.filter)
-      )
-    }
+  getNewDataByDates() {
+    this.props.recyclingStore.getDataByDate(this.state.startDate, this.state.endDate)
+    when(
+      () => this.props.recyclingStore.state === 'done',
+      () => this.props.recyclingStore.filteredDataByType(this.state.filter)
+    )
+  }
 
-    onFocusChange = (focusedInput) => {
-      this.setState({ focusedInput })
-    }
+  onFocusChange = (focusedInput) => {
+    this.setState({ focusedInput })
+  }
 
-    componentDidMount() {
-      this.props.recyclingStore.getDataByDate()
-    }
+  componentDidMount() {
+    this.props.recyclingStore.getDataByDate()
+  }
 
-    handleChange = event => {
-      this.setState({ filter: event.target.value }, this.filter)
-    };
+  handleChange = event => {
+    this.setState({ filter: event.target.value }, this.filter)
+  }
 
-    filter() {
-      this.props.recyclingStore.filteredDataByType(this.state.filter)
-    }
+  filter() {
+    this.props.recyclingStore.filteredDataByType(this.state.filter)
+  }
 
-    render() {
-      const { classes } = this.props
-      return (
-        <div>
-          <div className={classes.selection}>
-            <DateRangePicker
-              startDate={this.state.startDate} // momentPropTypes.momentObj or null,
-              startDateId="start-input" // PropTypes.string.isRequired,
-              endDate={this.state.endDate} // momentPropTypes.momentObj or null,
-              endDateId="end-input" // PropTypes.string.isRequired,
-              onDatesChange={this.onDatesChange} // PropTypes.func.isRequired,
-              focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
-              onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
-              isOutsideRange={() => false}
-              enableOutsideDays={false}
-            />
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="filter-simple">Filter</InputLabel>
-              <Select
-                value={this.state.filter}
-                onChange={this.handleChange}
-                inputProps={{
-                  name: 'filter',
-                  id: 'filter-simple',
-                }}
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-                {this.props.recyclingStore.recycledTypes.map(type => {
-                  return (
-                    <MenuItem value={type} key={type}>
-                      {type}
-                    </MenuItem>
-                  )
-                })}
-              </Select>
-            </FormControl>
-          </div>
-          <Table>
-            {this.props.recyclingStore.recyclingData}
-          </Table>
+  render() {
+    const { classes } = this.props
+    return (
+      <div>
+        <div className={classes.selection}>
+          <DateRangePicker
+            startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+            startDateId="start-input" // PropTypes.string.isRequired,
+            endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+            endDateId="end-input" // PropTypes.string.isRequired,
+            onDatesChange={this.onDatesChange} // PropTypes.func.isRequired,
+            focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+            onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
+            isOutsideRange={() => false}
+            enableOutsideDays={false}
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="filter-simple">Filter</InputLabel>
+            <Select
+              value={this.state.filter}
+              onChange={this.handleChange}
+              inputProps={{
+                name: 'filter',
+                id: 'filter-simple',
+              }}
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              {this.props.recyclingStore.recycledTypes.map(type => {
+                return (
+                  <MenuItem value={type} key={type}>
+                    {type}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
         </div>
-      )
-    }
+        <Table>
+          {this.props.recyclingStore.recyclingData}
+        </Table>
+      </div>
+    )
+  }
 }
 
 RecyclingData.propTypes = {
