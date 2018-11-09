@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactHeatmap from 'react-heatmap-jsx'
 import { withStyles } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
 
 const styles = () => ({
   box: {
@@ -39,7 +38,7 @@ class HeatMap extends React.Component {
     const { classes } = this.props
     return (
       <div className={classes.box}>
-        <img className={classes.map} src="src/assets/images/zipmap.png"></img>
+        <img className={classes.map} src={require('../assets/images/zipmap.png')}/>
         <div className={classes.heat}>
           <ReactHeatmap max={100} data={this.state.data} />
         </div>
