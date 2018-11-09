@@ -23,6 +23,7 @@ import Timeline from '@material-ui/icons/Timeline'
 import {PropTypes as MobxPropTypes} from 'mobx-react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import TableChart from '@material-ui/icons/TableChartOutlined'
+import Map from '@material-ui/icons/MapOutlined'
 
 const drawerWidth = 240
 
@@ -112,6 +113,10 @@ class ClippedDrawer extends React.Component {
     this.props.history.push('/export')
   }
 
+  handleMapClick = () => {
+    this.props.history.push('/map')
+  }
+
   render() {
     const { classes, children, appState, theme } = this.props
     const { anchorEl } = this.state
@@ -139,6 +144,12 @@ class ClippedDrawer extends React.Component {
               <History />
             </ListItemIcon>
             <ListItemText primary="Export" />
+          </ListItem>
+          <ListItem button onClick={this.handleMapClick}>
+            <ListItemIcon>
+              <Map />
+            </ListItemIcon>
+            <ListItemText primary='Heat Map' />
           </ListItem>
         </List>
       </div>
