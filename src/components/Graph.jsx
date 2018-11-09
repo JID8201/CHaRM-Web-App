@@ -14,7 +14,7 @@ class Graph extends React.Component {
     renderActiveShape = (pieChart) => {
       const RADIAN = Math.PI / 180
       const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle,
-        fill, payload, percent, value } = pieChart
+        fill, payload, percent, type } = pieChart
       const sin = Math.sin(-RADIAN * midAngle)
       const cos = Math.cos(-RADIAN * midAngle)
       const sx = cx + (outerRadius + 10) * cos
@@ -48,7 +48,7 @@ class Graph extends React.Component {
           />
           <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none"/>
           <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none"/>
-          <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`Amount ${value}`}</text>
+          <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${type}`}</text>
           <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
             {`(Rate ${(percent * 100).toFixed(2)}%)`}
           </text>
@@ -76,7 +76,7 @@ class Graph extends React.Component {
           <Pie
             activeIndex={this.state.activeIndex}
             activeShape={this.renderActiveShape}
-            dataKey='value'
+            dataKey='amount'
             data={data}
             cx={300}
             cy={200}
@@ -99,10 +99,10 @@ class Graph extends React.Component {
       return (
         <BarChart width={600} height={300} data={data}
           margin={{top: 20, right: 30, left: 20, bottom: 5}}>
-          <XAxis dataKey="name"/>
+          <XAxis dataKey="type"/>
           <YAxis/>
           <Tooltip/>
-          <Bar dataKey="value" fill="#8884d8" >
+          <Bar dataKey="amount" fill="#8884d8" >
             {
               data.map((entry, i) => <Cell key={i} fill={COLORS[i % COLORS.length]}/>)
             }
@@ -112,38 +112,25 @@ class Graph extends React.Component {
     }
 
     render() {
-      const graph = this.props.graph
-      const rechartData = [
-        {
-          name: 'Plastic',
-          value: 300
-        },
-        {
-          name: 'Paint',
-          value: 50
-        },
-        {
-          name: 'Metal',
-          value: 100
-        }
-      ]
+      const { graph, data } = this.props
+      console.log(data)
 
       if (graph === 'bar') {
         return (
           <div>
-            {this.bar(rechartData)}
+            {this.bar(data)}
           </div>
         )
       } else if (graph === 'donut') {
         return (
           <div>
-            {this.pie(rechartData)}
+            {this.pie(data)}
           </div>
         )
       } else {
         return (
           <div>
-                    Something went very wrong
+            Something went very wrong
           </div>
         )
       }
@@ -151,6 +138,7 @@ class Graph extends React.Component {
 }
 
 Graph.propTypes = {
-  graph: PropTypes.string
+  graph: PropTypes.string.isRequired,
+  data: PropTypes.array.isRequired
 }
 export default Graph
