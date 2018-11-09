@@ -1,5 +1,5 @@
 import React from 'react'
-import HeatMap from '../components/HeatMap';
+import HeatMap from '../components/HeatMap'
 
 class MapContainer extends React.Component {
   render() {

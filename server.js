@@ -20,16 +20,17 @@ const api = require('./backend/routes')
 
 app.use(cors())
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, '/')))
 app.use('/api', api)
 db.on('error', console.error.bind(console, 'connection error:'))
 
 if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/static')))
   app.get('/*', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    res.sendFile(__dirname + '/static/index.html')
   })
 } else {
   app.get('/*', (req, res) => {
+    app.use(express.static(path.join(__dirname, '/')))
     res.sendFile(__dirname + '/public/index.html')
   })
 }

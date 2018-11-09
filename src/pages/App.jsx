@@ -12,7 +12,7 @@ import GraphData from './GraphData'
 import ProfilePage from './ProfilePage'
 import { hot } from 'react-hot-loader'
 import Export from './Export'
-import MapContainer from './MapContainer';
+import MapContainer from './MapContainer'
 
 @inject('appState')
 @withRouter
