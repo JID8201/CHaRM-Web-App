@@ -2,7 +2,7 @@ const csv = require('fast-csv')
 const Recycling = require('mongoose').model('Recycling')
 
 module.exports.create = (req, res, next) => {
-  if (!req.body.type) {
+  if (!req.body.types) {
     return next(new Error('type of recycled item is required'))
   }
   if (!req.body.zip) {

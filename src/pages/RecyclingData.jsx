@@ -102,7 +102,7 @@ class RecyclingData extends React.Component {
                 id: 'filter-simple',
               }}
             >
-              <MenuItem value=''>
+              <MenuItem value='' key='none'>
                 <em>None</em>
               </MenuItem>
               {this.props.recyclingStore.recycledTypes.map(type => {

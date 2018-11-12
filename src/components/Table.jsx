@@ -44,6 +44,7 @@ class CenteredGrid extends React.Component {
     this.setState({ order, orderBy })
   }
 
+  // move this logic to MobX
   desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1
@@ -65,6 +66,7 @@ class CenteredGrid extends React.Component {
   }
 
   getSorting(order, orderBy) {
+    console.log('order: ', order, 'orderby: ', orderBy)
     return order === 'desc' ? (a, b) => this.desc(a, b, orderBy) : (a, b) => - this.desc(a, b, orderBy)
   }
 
@@ -81,16 +83,16 @@ class CenteredGrid extends React.Component {
           <TableBody>
             {this.stableSort(children, this.getSorting(this.state.order, this.state.orderBy))
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(data => {
+              .map(data => data.types.map(recycling => {
                 return (
-                  <TableRow key={data._id}>
+                  <TableRow key={data._id + recycling}>
                     <TableCell numeric>{data.zip}</TableCell>
-                    <TableCell>{data.type}</TableCell>
-                    <TableCell numeric>{data.amount}</TableCell>
+                    <TableCell>{recycling}</TableCell>
+                    <TableCell numeric>{data.amount} {recycling !== 'mattress' ? <p> lbs</p> : null}</TableCell>
                     <TableCell>{moment(data.created_at).format('YYYY-MM-DD')}</TableCell>
                   </TableRow>
                 )
-              })}
+              }))}
           </TableBody>
         </Table>
       </Paper>

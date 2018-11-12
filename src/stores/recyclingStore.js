@@ -28,10 +28,11 @@ export class RecyclingStore {
       }
     })
 
+    // should probably hard code for effiecency
     @computed get recycledTypes() {
       let arr = []
       this.originalData.forEach(data => {
-        if (!arr.includes(data.type)) arr.push(data.type)
+        data.types.forEach(item => { !arr.includes(item) ? arr.push(item) : null })
       })
       return arr
     }
