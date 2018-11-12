@@ -13,7 +13,7 @@ module.exports.create = (req, res, next) => {
   }
 
   Recycling.create({
-    type: req.body.type,
+    types: req.body.types,
     zip: req.body.zip,
     amount: req.body.amount,
     notes: req.body.notes ? req.body.notes : []
@@ -36,18 +36,15 @@ module.exports.create = (req, res, next) => {
 
 module.exports.getDateRange = (req, res, next) => {
   // this is bad, shouldn't throw error should return dates in the given range or all
-  if (!req.query.startDate) {
-    return next(new Error('Starting date range required'))
-  }
-  if (!req.query.endDate) {
-    return next(new Error('Ending date range required'))
-  }
-  const start = new Date(req.query.startDate)
-  const end = new Date(req.query.endDate)
-  Recycling.find({created_at: {'$gte': start, '$lte': end}},
-    (err, result) => {
+  // if (!req.query.startDate) {
+  //   return next(new Error('Starting date range required'))
+  // }
+  // if (!req.query.endDate) {
+  //   return next(new Error('Ending date range required'))
+  // }
+  if (!req.query.startDate && !req.query.endDate) {
+    Recycling.find({}, (err, result) => {
       if (err) {
-        // we done fucked up bad
         res.locals.error = {
           status: 500,
           msg: 'error: ' + err
@@ -59,8 +56,28 @@ module.exports.getDateRange = (req, res, next) => {
         }
         return next()
       }
-    }
-  )
+    })
+  } else {
+    const start = new Date(req.query.startDate)
+    const end = new Date(req.query.endDate)
+    Recycling.find({created_at: {'$gte': start, '$lte': end}},
+      (err, result) => {
+        if (err) {
+          // we done fucked up bad
+          res.locals.error = {
+            status: 500,
+            msg: 'error: ' + err
+          }
+          return next()
+        } else {
+          res.locals.data = {
+            recycling: result
+          }
+          return next()
+        }
+      }
+    )
+  }
 }
 
 module.exports.get = (req, res, next) => {

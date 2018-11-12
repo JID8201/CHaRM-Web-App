@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
 var RecyclingSchema = new mongoose.Schema({
-  type: {
-    type: String,
+  types: {
+    type: [String],
     required: true
   },
   zip: {
