@@ -8,6 +8,10 @@ const RecycledItemSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true
+  },
+  notes: {
+    type: String,
+    required: false
   }
 })
 const RecyclingSchema = new mongoose.Schema({
@@ -20,10 +24,6 @@ const RecyclingSchema = new mongoose.Schema({
     min: 0o0000,
     max: 99999,
     required: true
-  },
-  notes: {
-    type: String,
-    required: false
   }
 }, {
   timestamps: {

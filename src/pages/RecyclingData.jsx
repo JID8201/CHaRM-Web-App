@@ -92,6 +92,7 @@ class RecyclingData extends React.Component {
             onFocusChange={focusedInput => this.setState({ focusedInput })} // PropTypes.func.isRequired,
             isOutsideRange={() => false}
             enableOutsideDays={false}
+            minimumNights={0}
           />
           <FormControl className={classes.formControl}>
             <InputLabel htmlFor="filter-simple">Filter</InputLabel>

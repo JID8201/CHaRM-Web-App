@@ -12,7 +12,6 @@ module.exports.create = (req, res, next) => {
   Recycling.create({
     items: req.body.items,
     zip: req.body.zip,
-    notes: req.body.notes ? req.body.notes : []
   }, (err, result) => {
     if (err) {
       res.locals.error = {
@@ -31,25 +30,10 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.getDateRange = (req, res, next) => {
-
-  if (!req.query.startDate && !req.query.endDate) {
-    Recycling.aggregate([{ $unwind: '$items' }], (err, result) => {
-      if (err) {
-        res.locals.error = {
-          status: 500,
-          msg: 'error: ' + err
-        }
-        return next()
-      } else {
-        res.locals.data = {
-          recycling: result
-        }
-        return next()
-      }
-    })
-  } else {
+  if (req.query.startDate && req.query.endDate) {
     const start = new Date(req.query.startDate)
     const end = new Date(req.query.endDate)
+    end.setUTCHours(23,59,59,999)
     Recycling.aggregate([
       {
         $match: {
@@ -73,31 +57,78 @@ module.exports.getDateRange = (req, res, next) => {
         return next()
       }
     })
+  } else { // fail safe
+    Recycling.aggregate([{ $unwind: '$items' }], (err, result) => {
+      if (err) {
+        res.locals.error = {
+          status: 500,
+          msg: 'error: ' + err
+        }
+        return next()
+      } else {
+        res.locals.data = {
+          recycling: result
+        }
+        return next()
+      }
+    })
   }
 }
 
 module.exports.getGraphData = (req, res, next) => {
-  Recycling.aggregate([
-    {
-      $unwind: '$items'
-    },
-    {
-      $group: { _id: { items: '$items.type'}, amount: { $sum: '$items.amount' } }
-    }
-  ], (err, result) => {
-    if (err) {
-      res.locals.error = {
-        status: 500,
-        msg: 'error: ' + err
+  if (req.query.startDate && req.query.endDate) {
+    const start = new Date(req.query.startDate)
+    const end = new Date(req.query.endDate)
+    end.setUTCHours(23,59,59,999)
+    Recycling.aggregate([
+      {
+        $match: {
+          created_at: {'$gte': start, '$lte': end}
+        },
+      },
+      {
+        $unwind: '$items'
+      },
+      {
+        $group: { _id: { items: '$items.type'}, amount: { $sum: '$items.amount' } }
       }
-      return next()
-    } else {
-      res.locals.data = {
-        recycling: result
+    ], (err, results) => {
+      if (err) {
+        res.locals.error = {
+          status: 500,
+          msg: 'error: ' + err
+        }
+        return next()
+      } else {
+        res.locals.data = {
+          recycling: results
+        }
+        return next()
       }
-      return next()
-    }
-  })
+    })
+  } else {
+    Recycling.aggregate([
+      {
+        $unwind: '$items'
+      },
+      {
+        $group: { _id: { items: '$items.type'}, amount: { $sum: '$items.amount' } }
+      }
+    ], (err, results) => {
+      if (err) {
+        res.locals.error = {
+          status: 500,
+          msg: 'error: ' + err
+        }
+        return next()
+      } else {
+        res.locals.data = {
+          recycling: results
+        }
+        return next()
+      }
+    })
+  }
 }
 
 module.exports.getYearCSV = (req, res, next) => {
@@ -117,8 +148,16 @@ module.exports.getYearCSV = (req, res, next) => {
 
   csvStream.pipe(res)
   Recycling
-    .find({created_at: {'$gte': start, '$lte': end}})
-    .exec((err, result) => {
+    .aggregate([
+      {
+        $match: {
+          created_at: {'$gte': start, '$lte': end}
+        },
+      },
+      {
+        $unwind: '$items'
+      }
+    ], (err, result) => {
       if (err) {
         res.locals.error = {
           status: 404,
@@ -133,10 +172,10 @@ module.exports.getYearCSV = (req, res, next) => {
 
       for (let entry of result) {
         csvStream.write({
-          Type: entry.type,
+          Type: entry.items.type,
           Zip : entry.zip,
-          Amount : entry.amount,
-          Notes: entry.notes,
+          Amount : entry.items.amount,
+          Notes: entry.items.notes,
           Timestamps: entry.created_at
         })
       }

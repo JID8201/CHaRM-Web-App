@@ -28,15 +28,21 @@ export class RecyclingStore {
       }
     })
 
-    getGraphData = flow(function * () {
+    getGraphData = flow(function * (startDate, endDate) {
       this.graphData = []
+      if (!startDate && !endDate) {
+        startDate = moment().subtract(30, 'days').utc()
+        endDate = moment().utc()
+      }
+      this.state = 'pending'
       try {
-        const response = yield fetch ('/api/graph-data')
+        const uri = '/api/graph-data?startDate=' + startDate.format('YYYY-MM-DD') + '&endDate=' + endDate.format('YYYY-MM-DD')
+        const response = yield fetch(uri)
         const data = yield response.json()
         this.graphData = data.recycling
         this.state = 'done'
       } catch (err) {
-        this.state = 'error'
+        this.state = 'error' // handle these
       }
     })
 
