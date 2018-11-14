@@ -1,41 +1,49 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { inject } from 'mobx-react';
-import logo from './live-thrive-logo.png';
-import {withRouter} from 'react-router-dom';
-import History from '@material-ui/icons/History';
-import TrendingUp from '@material-ui/icons/TrendingUp';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import MenuItem from '@material-ui/core/MenuItem'
+import Hidden from '@material-ui/core/Hidden'
+import Divider from '@material-ui/core/Divider'
+import Menu from '@material-ui/core/Menu'
+import { inject } from 'mobx-react'
+import logo from '../assets/images/live-thrive-logo.png'
+import {withRouter} from 'react-router-dom'
+import History from '@material-ui/icons/History'
+import Timeline from '@material-ui/icons/Timeline'
+import {PropTypes as MobxPropTypes} from 'mobx-react'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TableChart from '@material-ui/icons/TableChartOutlined'
+import Map from '@material-ui/icons/MapOutlined'
 
-
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
-    height: '100vh',
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
     display: 'flex',
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
   },
-  drawerPaper: {
-    position: 'relative',
-    width: drawerWidth,
+  appBar: {
+    marginLeft: drawerWidth,
+    zIndex: theme.zIndex.drawer + 1,
+    display: 'flex',
+    // [theme.breakpoints.up('sm')]: {
+    //   width: `calc(100% - ${drawerWidth}px)`,
+    // },
   },
   logo: {
     width: '100%',
@@ -43,130 +51,205 @@ const styles = theme => ({
     display: 'block',
     padding: '7px 0'
   },
-  iconHolder: {
-    flex: 1,
-    textAlign: 'right'
+  menuButton: {
+    marginRight: 20,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
+  toolbar: theme.mixins.toolbar,
+  drawerPaper: {
+    width: drawerWidth,
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
-    minWidth: 0, // So the Typography noWrap works
+    padding: '20px'
   },
-  toolbar: theme.mixins.toolbar,
-});
+  iconHolder: {
+    flex: 1,
+    textAlign: 'right'
+  }
+})
 
-@inject("store")
-@withRouter
+@inject('appState')
+@withRouter // This lets it switch between components. It uses the props.history!!!!!
 class ClippedDrawer extends React.Component {
   state = {
     anchorEl: null,
+    mobileOpen: false
+  };
+
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }))
   };
 
   handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
+    this.setState({ anchorEl: event.currentTarget })
   };
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null })
   };
 
   logout = () => {
-    this.setState({ anchorEl: null});
-    this.props.store.authenticate();
+    this.setState({ anchorEl: null})
+    this.props.appState.authenticate()
   }
 
   handleTableOnClick = () => {
-    this.props.history.push('/');
+    this.props.history.push('/')
   }
 
   handleGraphOnClick = () => {
-    this.props.history.push('/graph');
+    this.props.history.push('/graph')
   }
 
   handleMyAccount = () => {
-    this.props.history.push('/profile');
-    this.handleClose();
+    this.props.history.push('/profile')
+    this.handleClose()
+  }
+
+  handleExportClick = () => {
+    this.props.history.push('/export')
+  }
+
+  handleMapClick = () => {
+    this.props.history.push('/map')
   }
 
   render() {
-    const { classes, children, store } = this.props;
-    const { anchorEl } = this.state;
-    const open = Boolean(anchorEl);
+    const { classes, children, appState, theme } = this.props
+    const { anchorEl } = this.state
+    const open = Boolean(anchorEl)
+
+    const drawer = (
+      <div>
+        <div className={classes.toolbar} />
+        <Divider />
+        <List>
+          <ListItem button onClick={this.handleTableOnClick}>
+            <ListItemIcon>
+              <TableChart />
+            </ListItemIcon>
+            <ListItemText primary="Table" />
+          </ListItem>
+          <ListItem button onClick={this.handleGraphOnClick}>
+            <ListItemIcon>
+              <Timeline />
+            </ListItemIcon>
+            <ListItemText primary="Graph" />
+          </ListItem>
+          <ListItem button onClick={this.handleExportClick}>
+            <ListItemIcon>
+              <History />
+            </ListItemIcon>
+            <ListItemText primary="Export" />
+          </ListItem>
+          <ListItem button onClick={this.handleMapClick}>
+            <ListItemIcon>
+              <Map />
+            </ListItemIcon>
+            <ListItemText primary='Heat Map' />
+          </ListItem>
+        </List>
+      </div>
+    )
 
     return (
       <div className={classes.root}>
-        <AppBar className={classes.appBar} position="absolute">
-            <Toolbar>
-              <div style={{ maxWidth: '186px' }} >
-                <img src={logo} alt="Live Thrive" className={classes.logo} />
+        <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <div style={{ maxWidth: '186px' }} >
+              <img src={logo} alt="Live Thrive" className={classes.logo} />
+            </div>
+            { appState.authenticated && (
+              <div className={classes.iconHolder} >
+                <IconButton
+                  aria-owns={open ? 'menu-appbar' : null}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={this.handleMyAccount}>My account</MenuItem>
+                  <MenuItem onClick={this.logout}>Sign out</MenuItem>
+                </Menu>
               </div>
-              { store.authenticated && (
-                <div className={classes.iconHolder} >
-                  <IconButton
-                    aria-owns={open ? 'menu-appbar' : null}
-                    aria-haspopup="true"
-                    onClick={this.handleMenu}
-                    color="inherit"
-                  >
-                    <AccountCircle />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'right',
-                    }}
-                    open={open}
-                    onClose={this.handleClose}
-                  >
-                    <MenuItem onClick={this.handleMyAccount}>My account</MenuItem>
-                    <MenuItem onClick={this.logout}>Sign out</MenuItem>
-                  </Menu>
-                </div>
-                )}
-            </Toolbar>
-          </AppBar>
-        {store.authenticated && (
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-          >
-            <div className={classes.toolbar} />
-            <List>
-              <ListItem button onClick={this.handleTableOnClick}>
-                <ListItemIcon>
-                  <History />
-                </ListItemIcon>
-                <ListItemText primary="Table" />
-              </ListItem>
-              <ListItem button onClick={this.handleGraphOnClick}>
-                <ListItemIcon>
-                  <TrendingUp />
-                </ListItemIcon>
-                <ListItemText primary="Graph" />
-              </ListItem>
-            </List>
-          </Drawer>
+            )}
+          </Toolbar>
+        </AppBar>
+        {appState.authenticated && (
+          <nav className={classes.drawer}>
+            {/* The implementation can be swap with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="css">
+              <Drawer
+                container={this.props.container}
+                variant="temporary"
+                anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                open={this.state.mobileOpen}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                ModalProps={{
+                  keepMounted: true, // Better open performance on mobile.
+                }}
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="css">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper,
+                }}
+                variant="permanent"
+                open
+              >
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
         )}
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {children}
         </main>
       </div>
-    );
+    )
   }
 }
 
 ClippedDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
-};
+  history: PropTypes.array,
+  children: PropTypes.object.isRequired,
+  appState: MobxPropTypes.observableArray,
+  theme: PropTypes.object.isRequired
+}
 
-export default withStyles(styles)(ClippedDrawer);
+export default withStyles(styles, { withTheme: true })(ClippedDrawer)
