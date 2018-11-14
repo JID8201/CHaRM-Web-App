@@ -1,18 +1,24 @@
 const mongoose = require('mongoose')
 
-var RecyclingSchema = new mongoose.Schema({
-  types: {
-    type: [String],
+const RecycledItemSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    required: true
+  },
+  amount: {
+    type: Number,
+    required: true
+  }
+})
+const RecyclingSchema = new mongoose.Schema({
+  items: {
+    type: [RecycledItemSchema],
     required: true
   },
   zip: {
     type: Number,
     min: 0o0000,
     max: 99999,
-    required: true
-  },
-  amount: {
-    type: Number,
     required: true
   },
   notes: {

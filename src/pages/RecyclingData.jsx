@@ -14,6 +14,7 @@ import '../assets/styles/RecyclingData.css'
 import { when } from 'mobx'
 import {PropTypes as MobxPropTypes} from 'mobx-react'
 import PropTypes from 'prop-types'
+import moment from 'moment'
 
 const styles = theme => ({
   root: {
@@ -42,8 +43,8 @@ class RecyclingData extends React.Component {
     super(props)
     this.state = {
       focusedInput: null,
-      startDate: null,
-      endDate: null,
+      startDate: moment().subtract(30, 'days'),
+      endDate: moment(),
       filter: '',
     }
   }

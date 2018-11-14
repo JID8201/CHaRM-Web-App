@@ -7,14 +7,14 @@ export class RecyclingStore {
     @observable recyclingData = [];
     @observable filteredData = [];
     @observable state = 'pending' // "pending" / "done" / "error"
-
     @observable originalData = [];
+    @observable graphData = []
 
     getDataByDate = flow(function * (startDate, endDate) {
       this.recyclingData = []
       if (!startDate && !endDate) {
-        startDate = moment().subtract(30, 'days')
-        endDate = moment()
+        startDate = moment().subtract(30, 'days').utc()
+        endDate = moment().utc()
       }
       this.state = 'pending'
       try {
@@ -28,18 +28,31 @@ export class RecyclingStore {
       }
     })
 
+    getGraphData = flow(function * () {
+      this.graphData = []
+      try {
+        const response = yield fetch ('/api/graph-data')
+        const data = yield response.json()
+        this.graphData = data.recycling
+        this.state = 'done'
+      } catch (err) {
+        this.state = 'error'
+      }
+    })
+
     // should probably hard code for effiecency
     @computed get recycledTypes() {
       let arr = []
       this.originalData.forEach(data => {
-        data.types.forEach(item => { !arr.includes(item) ? arr.push(item) : null })
+        if (!arr.includes(data.items.type)) arr.push(data.items.type)
       })
       return arr
     }
 
+
     @action filteredDataByType(type) {
       if (type !== '') {
-        this.recyclingData = this.originalData.filter(data => data.type === type)
+        this.recyclingData = this.originalData.filter(data => data.items.type === type)
       } else {
         this.recyclingData = this.originalData
       }

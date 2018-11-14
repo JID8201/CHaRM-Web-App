@@ -12,10 +12,10 @@ class EnhancedTableHead extends React.Component {
   };
 
   rows = [
-    { id: 'zipcode', numeric: true, disablePadding: false, label: 'ZIP Code' },
+    { id: 'zip', numeric: true, disablePadding: false, label: 'ZIP Code' },
     { id: 'type', numeric: false, disablePadding: false, label: 'Item' },
-    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount' },
-    { id: 'date', numeric: false, disablePadding: false, label: 'Date' },
+    { id: 'amount', numeric: true, disablePadding: false, label: 'Amount (lbs)' },
+    { id: 'created_at', numeric: false, disablePadding: false, label: 'Date' },
   ];
 
   render() {

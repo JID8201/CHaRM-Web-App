@@ -26,7 +26,7 @@ class GraphData extends React.Component {
   }
 
   componentDidMount() {
-    this.props.recyclingStore.getDataByDate()
+    this.props.recyclingStore.getGraphData()
   }
 
   handleGraphChange = (graph) => {
@@ -57,7 +57,7 @@ class GraphData extends React.Component {
           Bar
           </Button>
         </div>
-        <Graph graph={this.state.graph} data={this.props.recyclingStore.recyclingData}/>
+        <Graph graph={this.state.graph} data={this.props.recyclingStore.graphData}/>
       </div>
     )
   }

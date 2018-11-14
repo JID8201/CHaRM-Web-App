@@ -2,20 +2,16 @@ const csv = require('fast-csv')
 const Recycling = require('mongoose').model('Recycling')
 
 module.exports.create = (req, res, next) => {
-  if (!req.body.types) {
-    return next(new Error('type of recycled item is required'))
+  if (!req.body.items) {
+    return next(new Error('the recycled items must be included'))
   }
   if (!req.body.zip) {
     return next(new Error('zip code is required'))
   }
-  if (!req.body.amount) {
-    return next(new Error('amount of recycled item is required'))
-  }
 
   Recycling.create({
-    types: req.body.types,
+    items: req.body.items,
     zip: req.body.zip,
-    amount: req.body.amount,
     notes: req.body.notes ? req.body.notes : []
   }, (err, result) => {
     if (err) {
@@ -35,15 +31,9 @@ module.exports.create = (req, res, next) => {
 }
 
 module.exports.getDateRange = (req, res, next) => {
-  // this is bad, shouldn't throw error should return dates in the given range or all
-  // if (!req.query.startDate) {
-  //   return next(new Error('Starting date range required'))
-  // }
-  // if (!req.query.endDate) {
-  //   return next(new Error('Ending date range required'))
-  // }
+
   if (!req.query.startDate && !req.query.endDate) {
-    Recycling.find({}, (err, result) => {
+    Recycling.aggregate([{ $unwind: '$items' }], (err, result) => {
       if (err) {
         res.locals.error = {
           status: 500,
@@ -60,28 +50,41 @@ module.exports.getDateRange = (req, res, next) => {
   } else {
     const start = new Date(req.query.startDate)
     const end = new Date(req.query.endDate)
-    Recycling.find({created_at: {'$gte': start, '$lte': end}},
-      (err, result) => {
-        if (err) {
-          // we done fucked up bad
-          res.locals.error = {
-            status: 500,
-            msg: 'error: ' + err
-          }
-          return next()
-        } else {
-          res.locals.data = {
-            recycling: result
-          }
-          return next()
-        }
+    Recycling.aggregate([
+      {
+        $match: {
+          created_at: {'$gte': start, '$lte': end}
+        },
+      },
+      {
+        $unwind: '$items'
       }
-    )
+    ], (err, result) => {
+      if (err) {
+        res.locals.error = {
+          status: 500,
+          msg: 'error: ' + err
+        }
+        return next()
+      } else {
+        res.locals.data = {
+          recycling: result
+        }
+        return next()
+      }
+    })
   }
 }
 
-module.exports.get = (req, res, next) => {
-  Recycling.find({}, (err, result) => {
+module.exports.getGraphData = (req, res, next) => {
+  Recycling.aggregate([
+    {
+      $unwind: '$items'
+    },
+    {
+      $group: { _id: { items: '$items.type'}, amount: { $sum: '$items.amount' } }
+    }
+  ], (err, result) => {
     if (err) {
       res.locals.error = {
         status: 500,
@@ -92,6 +95,7 @@ module.exports.get = (req, res, next) => {
       res.locals.data = {
         recycling: result
       }
+      return next()
     }
   })
 }

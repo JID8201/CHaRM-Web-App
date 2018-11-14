@@ -28,12 +28,12 @@ class CenteredGrid extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      order: 'asc',
-      orderBy: 'calories'
+      order: 'desc',
+      orderBy: 'created_at'
     }
   }
 
-  handleRequestSort = (event, property) => {
+  handleRequestSort = (_, property) => {
     const orderBy = property
     let order = 'desc'
 
@@ -46,17 +46,29 @@ class CenteredGrid extends React.Component {
 
   // move this logic to MobX
   desc(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1
+    if (orderBy === 'type' || orderBy === 'amount') {
+      if (b.items[orderBy] < a.items[orderBy]) {
+        return -1
+      }
+      if (b.items[orderBy] > a.items[orderBy]) {
+        return 1
+      }
+      return 0
+    } else {
+      if (b[orderBy] < a[orderBy]) {
+        return -1
+      }
+      if (b[orderBy] > a[orderBy]) {
+        return 1
+      }
+      return 0
     }
-    if (b[orderBy] > a[orderBy]) {
-      return 1
-    }
-    return 0
   }
 
   stableSort(array, cmp) {
-    const stabilizedThis = array.map((el, index) => [el, index])
+    const stabilizedThis = array.map((el, index) =>  {
+      return [el, index]
+    })
     stabilizedThis.sort((a, b) => {
       const order = cmp(a[0], b[0])
       if (order !== 0) return order
@@ -66,7 +78,6 @@ class CenteredGrid extends React.Component {
   }
 
   getSorting(order, orderBy) {
-    console.log('order: ', order, 'orderby: ', orderBy)
     return order === 'desc' ? (a, b) => this.desc(a, b, orderBy) : (a, b) => - this.desc(a, b, orderBy)
   }
 
@@ -83,16 +94,16 @@ class CenteredGrid extends React.Component {
           <TableBody>
             {this.stableSort(children, this.getSorting(this.state.order, this.state.orderBy))
               // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(data => data.types.map(recycling => {
+              .map(data => {
                 return (
-                  <TableRow key={data._id + recycling}>
+                  <TableRow key={data.items._id}>
                     <TableCell numeric>{data.zip}</TableCell>
-                    <TableCell>{recycling}</TableCell>
-                    <TableCell numeric>{data.amount} {recycling !== 'mattress' ? <p> lbs</p> : null}</TableCell>
+                    <TableCell>{data.items.type}</TableCell>
+                    <TableCell numeric>{data.items.amount}</TableCell>
                     <TableCell>{moment(data.created_at).format('YYYY-MM-DD')}</TableCell>
                   </TableRow>
                 )
-              }))}
+              })}
           </TableBody>
         </Table>
       </Paper>

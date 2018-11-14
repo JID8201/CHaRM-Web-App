@@ -3,7 +3,7 @@ const router = express.Router()
 const recycling = require('./controllers/recycling')
 
 router.post('/recycling', recycling.create)
-// router.get('/recycling', recycling.get)
+router.get('/graph-data', recycling.getGraphData)
 router.get('/recycling', recycling.getDateRange)
 router.get('/yearcsv', recycling.getYearCSV)
 
