@@ -49,7 +49,7 @@ const styles = theme => ({
 
 @inject('appState')
 @observer
-class SignIn extends React.Component {
+class Register extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -74,8 +74,16 @@ class SignIn extends React.Component {
               <Avatar className={this.props.classes.avatar}>
                 <LockIcon />
               </Avatar>
-              <Typography variant="h5">Sign in</Typography>
+              <Typography variant="h5">Register</Typography>
               <form className={this.props.classes.form}>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="first-name">First Name</InputLabel>
+                  <Input id="first-name" name="first-name" autoComplete="first-name" autoFocus />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="last-name">Last Name</InputLabel>
+                  <Input id="last-name" name="last-name" autoComplete="last-name" autoFocus />
+                </FormControl>
                 <FormControl margin="normal" required fullWidth>
                   <InputLabel htmlFor="email">Email Address</InputLabel>
                   <Input id="email" name="email" autoComplete="email" autoFocus />
@@ -86,6 +94,15 @@ class SignIn extends React.Component {
                     name="password"
                     type="password"
                     id="password"
+                    autoComplete="current-password"
+                  />
+                </FormControl>
+                <FormControl margin="normal" required fullWidth>
+                  <InputLabel htmlFor="confirm-password">Password</InputLabel>
+                  <Input
+                    name="confirm-password"
+                    type="confirm-password"
+                    id="confirm-password"
                     autoComplete="current-password"
                   />
                 </FormControl>
@@ -100,16 +117,16 @@ class SignIn extends React.Component {
               </form>
               <Typography variant="subtitle1" style={{ paddingTop: '20px' }}><Link to='/forgot-password' style={{ color: 'black', textDecoration: 'none' }}>Forgot your password?</Link></Typography>
             </Paper>
-            <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='register' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
+            <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='create-account' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
           </main>
         </React.Fragment>
       )
     }
 }
 
-SignIn.propTypes = {
+Register.propTypes = {
   classes: PropTypes.object.isRequired,
   appState: MobxPropTypes.observableArray
 }
 
-export default withStyles(styles)(SignIn)
+export default withStyles(styles)(Register)

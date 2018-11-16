@@ -1,19 +1,50 @@
-const express = require('express')
-const router = express.Router()
-const recycling = require('./controllers/recycling')
+import { Router } from 'express'
+const router = Router()
+import { getGraphData, getDateRange, getYearCSV } from './controllers/recycling'
+import { create, login } from './controllers/users'
+import passport from 'passport'
+require('./configs/passport')
 
-router.post('/recycling', recycling.create)
-router.get('/graph-data', recycling.getGraphData)
-router.get('/recycling', recycling.getDateRange)
-router.get('/yearcsv', recycling.getYearCSV)
+router.post('/register', create)
+router.post('/login', login)
 
+
+router.post('/recycling')
+router.get('/recycling', passport.authenticate('jwt', {session: false}), getDateRange)
+router.get('/graph-data', passport.authenticate('jwt', {session: false}), getGraphData)
+router.get('/yearcsv', passport.authenticate('jwt', {session: false}), getYearCSV)
+
+
+// if (process.env.NODE_ENV === 'development') {
+
+//   router.use(function(err, req, res) {
+//     res.status(err.status || 500)
+//     res.render('error', {
+//       message: err.message,
+//       error: err
+//     })
+//   })
+
+// }
+
+// // production error handler
+// // no stacktraces leaked to user
+// router.use(function(err, req, res) {
+//   res.status(err.status || 500)
+//   res.render('error', {
+//     message: err.message,
+//     error: {}
+//   })
+// })
+
+// rewrite this later
 router.use((req, res, next) => {
   if (res.locals.data) {
     let response = Object.assign({}, res.locals.data, {
-      'status': 'ok'
+      'success': 'true'
     })
     return res.status(200).json(response)
-  } else if (res.locals.error) { // Any errors thrown are be handled below, but because we're bad not all errors are thrown >:(
+  } else if (res.locals.error) { // Any errors thrown are be handled below
     let statusCode = res.locals.error.code || 500
     let response = Object.assign({}, res.locals.error, {
       'status': 'error'

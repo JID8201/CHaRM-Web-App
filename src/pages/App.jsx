@@ -5,7 +5,6 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import NavSideBar from '../components/NavSideBar'
 import PrivateRoute from '../components/PrivateRoute'
 import { inject, observer } from 'mobx-react'
-import CreateAccount from './CreateAccount'
 import ForgotPassword from './ForgotPassword'
 import RecyclingData from './RecyclingData'
 import GraphData from './GraphData'
@@ -13,6 +12,7 @@ import ProfilePage from './ProfilePage'
 import { hot } from 'react-hot-loader'
 import Export from './Export'
 import MapContainer from './MapContainer'
+import Register from './Register'
 
 @inject('appState')
 @withRouter
@@ -24,7 +24,7 @@ class App extends Component {
         <NavSideBar>
           <Switch>
             <Route exact path="/login" component={SignIn} />
-            <Route exact path="/create-account" component={CreateAccount} />
+            <Route exact path="/register" component={Register} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <PrivateRoute exact path="/graph" component={GraphData}/>
             <PrivateRoute exact path="/profile" component={ProfilePage} />

@@ -1,18 +1,25 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
+import { hashSync, compareSync } from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 var UserSchema = mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   lastName: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   email: {
     type: String,
-    required: true,
-    unique: true
+    lowercase: true,
+    trim: true,
+    index: true,
+    unique: true,
+    sparse: true
   },
   password: {
     type: String,
@@ -20,4 +27,40 @@ var UserSchema = mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('User', UserSchema)
+UserSchema.pre('save', async function(next){
+
+  if (this.isModified('password') || this.isNew) {
+    this.password = hashSync(this.password, 10)
+  } else{
+    return next()
+  }
+})
+
+UserSchema.virtual('fullname').get(function () {
+  return this.firstName + ' ' + this.lastName
+})
+
+UserSchema.methods.validatePassword = async function(password) {
+  return compareSync(this.password, password)
+}
+
+UserSchema.methods.generateJWT = function() {
+  return jwt.sign({
+    email: this.email,
+    id: this._id,
+    expiresIn: process.env.SECRET_KEY_EXP
+  }, process.env.SECRET_KEY)
+}
+
+UserSchema.methods.toAuthJSON = function() {
+  return {
+    _id: this._id,
+    email: this.email,
+    fullname: this.fullname,
+    token: this.generateJWT(),
+  }
+}
+
+mongoose.model('Users', UserSchema)
+
+export default mongoose.model('User', UserSchema)
