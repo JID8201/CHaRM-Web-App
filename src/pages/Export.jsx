@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select'
 import InputLabel from '@material-ui/core/InputLabel'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
+import superagent from 'superagent'
 
 const styles = () => ({
   root: {
@@ -23,7 +24,7 @@ const styles = () => ({
     zIndex: '1'
   }
 })
-@inject('recyclingStore')
+@inject('commonStore')
 @observer
 class Export extends React.Component {
   constructor (props) {
