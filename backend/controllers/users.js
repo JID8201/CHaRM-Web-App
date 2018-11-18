@@ -1,36 +1,17 @@
 const User = require('mongoose').model('User')
 
 module.exports.create = (req, res, next) => {
-  // this is kinda bad and should be improved
-  // we should be able to return all these messages
-  // like 'you are missing first name, last name ...
   if (!req.body.firstName) {
-    res.locals.error = {
-      code: 422,
-      msg: 'First name is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'First name is required' })
   }
   if (!req.body.lastName) {
-    res.locals.error = {
-      code: 422,
-      msg: 'Last name is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'Last name is required' })
   }
   if (!req.body.email) {
-    res.locals.error = {
-      code: 422,
-      msg: 'Email is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'Email is required' })
   }
   if (!req.body.password) {
-    res.locals.error = {
-      code: 422,
-      msg: 'Password is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'Password is required' })
   }
   if (req.body.email &&
       req.body.firstName &&
@@ -45,16 +26,10 @@ module.exports.create = (req, res, next) => {
     //use schema.create to insert data into the db
     User.create(userData, function (err, user) {
       if (err) {
-        res.locals.error = {
-          code: 500,
-          msg: 'Something went wrong in the DB'
-        }
-        return next()
+        console.error(err)
+        return next(err)
       } else {
-        res.locals.data = {
-          status: 201,
-          user: user.toAuthJSON()
-        }
+        res.status(201).json({ user: user.toAuthJSON() })
         return next()
       }
     })
@@ -63,41 +38,26 @@ module.exports.create = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   if (!req.body.email) {
-    res.locals.error = {
-      code: 422,
-      msg: 'Email is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'Email is required' })
   }
   if (!req.body.password) {
-    req.locals.error = {
-      code: 422,
-      msg: 'Password is required'
-    }
-    return next()
+    return res.status(422).json({ msg: 'Password is required' })
   }
 
-  User.findOne({ email: req.body.email }, (err, user) => {
+  User.findOne({ email: req.body.email }, async (err, user) => {
     if (err) {
-      console.error(err)
-      res.locals.error ={
-        code: 500,
-        msg: err
-      }
-      return next()
+      return next(err)
     }
-    if (user && user.validatePassword(req.body.password)) {
-      res.locals.data = {
-        code: 200,
-        user: user.toAuthJSON()
-      }
-      return next()
+    const valid = await user.validatePassword(req.body.password)
+    if (user && valid) {
+      return res.status(200).json({user: user.toAuthJSON()})
     } else {
-      res.locals.error = {
-        msg: 'Incorrect username or password',
-        code: 403
-      }
-      return next()
+      return res.status(401).json({msg: 'Incorrect username or password'})
     }
   })
+}
+
+module.exports.getUser = (req, res, _) => {
+  if (req.user) return res.status(200).json({ user: req.user })
+  else return res.status(401).json({ msg: 'No token provided, please login or register' })
 }

@@ -3,28 +3,21 @@ const Recycling = require('mongoose').model('Recycling')
 
 module.exports.create = (req, res, next) => {
   if (!req.body.items) {
-    return next(new Error('the recycled items must be included'))
+    return res.status(422).json({ msg: 'the recycled item(s) must be include' })
   }
   if (!req.body.zip) {
-    return next(new Error('zip code is required'))
+    return res.status(422).json({ msg: 'The zip code is required' })
   }
 
   Recycling.create({
     items: req.body.items,
     zip: req.body.zip,
-  }, (err, result) => {
+  }, (err, _) => {
     if (err) {
-      res.locals.error = {
-        status: 500,
-        msg: 'error: ' + err
-      }
-      return next()
+      console.error(err)
+      return next(err)
     } else {
-      res.locals.data = {
-        recycling: result,
-        msg: 'Recycling data successfully added'
-      }
-      return next()
+      return res.status(201).json({ msg: 'Recycling data successfully created' })
     }
   })
 }
@@ -45,31 +38,19 @@ module.exports.getDateRange = (req, res, next) => {
       }
     ], (err, result) => {
       if (err) {
-        res.locals.error = {
-          status: 500,
-          msg: 'error: ' + err
-        }
-        return next()
+        console.error(err)
+        return next(err)
       } else {
-        res.locals.data = {
-          recycling: result
-        }
-        return next()
+        return res.status(200).json({ recycling: result })
       }
     })
   } else { // fail safe
     Recycling.aggregate([{ $unwind: '$items' }], (err, result) => {
       if (err) {
-        res.locals.error = {
-          status: 500,
-          msg: 'error: ' + err
-        }
-        return next()
+        console.error(err)
+        return next(err)
       } else {
-        res.locals.data = {
-          recycling: result
-        }
-        return next()
+        return res.status(200).json({ recycling: result })
       }
     })
   }
@@ -94,16 +75,10 @@ module.exports.getGraphData = (req, res, next) => {
       }
     ], (err, results) => {
       if (err) {
-        res.locals.error = {
-          status: 500,
-          msg: 'error: ' + err
-        }
-        return next()
+        console.error(err)
+        return next(err)
       } else {
-        res.locals.data = {
-          recycling: results
-        }
-        return next()
+        return res.status(200).json({ recycling: results })
       }
     })
   } else {
@@ -116,16 +91,10 @@ module.exports.getGraphData = (req, res, next) => {
       }
     ], (err, results) => {
       if (err) {
-        res.locals.error = {
-          status: 500,
-          msg: 'error: ' + err
-        }
-        return next()
+        console.error(err)
+        return next(err)
       } else {
-        res.locals.data = {
-          recycling: results
-        }
-        return next()
+        return res.status(200).json({ recycling: results })
       }
     })
   }
@@ -133,7 +102,7 @@ module.exports.getGraphData = (req, res, next) => {
 
 module.exports.getYearCSV = (req, res, next) => {
   if (!req.query.year) {
-    return next(new Error('Please select which year of data to download'))
+    return res.status(422).json({ msg: 'Please select which year of data to download' })
   }
 
   const csvStream = csv.createWriteStream({
@@ -159,12 +128,9 @@ module.exports.getYearCSV = (req, res, next) => {
       }
     ], (err, result) => {
       if (err) {
-        res.locals.error = {
-          status: 404,
-          msg: 'Could not find anything'
-        }
         csvStream.end()
-        return next()
+        console.error(err)
+        return next(err)
       }
       let filename = year.toString() + '.csv'
       let header = 'attachment; filename=' + filename

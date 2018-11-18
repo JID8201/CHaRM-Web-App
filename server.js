@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
   })
 } else {
   app.get('/*', (req, res) => {
-    app.use(express.static(path.join(__dirname, '/')))
+    app.use(express.static(path.join(__dirname, '/public')))
     res.sendFile(__dirname + '/public/index.html')
   })
 }

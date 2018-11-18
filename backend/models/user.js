@@ -41,7 +41,7 @@ UserSchema.virtual('fullname').get(function () {
 })
 
 UserSchema.methods.validatePassword = async function(password) {
-  return compareSync(this.password, password)
+  return await compareSync(password, this.password)
 }
 
 UserSchema.methods.generateJWT = function() {

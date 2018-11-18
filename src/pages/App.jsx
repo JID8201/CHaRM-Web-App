@@ -13,28 +13,53 @@ import { hot } from 'react-hot-loader'
 import Export from './Export'
 import MapContainer from './MapContainer'
 import Register from './Register'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-@inject('appState')
+@inject('commonStore', 'userStore')
 @withRouter
 @observer
 class App extends Component {
+
+  // componentWillMount() {
+  //   if (!this.props.commonStore.token) {
+  //     this.props.commonStore.setAppLoaded()
+  //   }
+  // }
+
+  componentDidMount() {
+    if (this.props.commonStore.token) {
+      this.props.userStore.getUser()
+        .finally(() => this.props.commonStore.setAppLoaded())
+    } else {
+      this.props.commonStore.setAppLoaded()
+    }
+  }
+
   render() {
-    return (
-      <div>
+    if (this.props.commonStore.appLoaded) {
+      return (
+        <div>
+          <NavSideBar>
+            <Switch>
+              <Route exact path="/login" component={SignIn} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/forgot-password" component={ForgotPassword} />
+              <PrivateRoute exact path="/graph" component={GraphData}/>
+              <PrivateRoute exact path="/profile" component={ProfilePage} />
+              <PrivateRoute exact path="/export" component={Export} />
+              <PrivateRoute exact path="/map" component={MapContainer} />
+              <PrivateRoute path="/" component={RecyclingData} />
+            </Switch>
+          </NavSideBar>
+        </div>
+      )
+    } else {
+      return (
         <NavSideBar>
-          <Switch>
-            <Route exact path="/login" component={SignIn} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/forgot-password" component={ForgotPassword} />
-            <PrivateRoute exact path="/graph" component={GraphData}/>
-            <PrivateRoute exact path="/profile" component={ProfilePage} />
-            <PrivateRoute exact path="/export" component={Export} />
-            <PrivateRoute exact path="/map" component={MapContainer} />
-            <PrivateRoute path="/" component={RecyclingData} />
-          </Switch>
+          <CircularProgress />
         </NavSideBar>
-      </div>
-    )
+      )
+    }
   }
 }
 

@@ -71,7 +71,7 @@ const styles = theme => ({
   }
 })
 
-@inject('appState')
+@inject('authStore', 'userStore')
 @withRouter // This lets it switch between components. It uses the props.history!!!!!
 class ClippedDrawer extends React.Component {
   state = {
@@ -93,7 +93,7 @@ class ClippedDrawer extends React.Component {
 
   logout = () => {
     this.setState({ anchorEl: null})
-    this.props.appState.authenticate()
+    this.props.authStore.logout()
   }
 
   handleTableOnClick = () => {
@@ -118,7 +118,7 @@ class ClippedDrawer extends React.Component {
   }
 
   render() {
-    const { classes, children, appState, theme } = this.props
+    const { classes, children, userStore, theme } = this.props
     const { anchorEl } = this.state
     const open = Boolean(anchorEl)
 
@@ -154,7 +154,6 @@ class ClippedDrawer extends React.Component {
         </List>
       </div>
     )
-
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -171,7 +170,7 @@ class ClippedDrawer extends React.Component {
             <div style={{ maxWidth: '186px' }} >
               <img src={logo} alt="Live Thrive" className={classes.logo} />
             </div>
-            { appState.authenticated && (
+            {userStore.currentUser && (
               <div className={classes.iconHolder} >
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : null}
@@ -202,12 +201,11 @@ class ClippedDrawer extends React.Component {
             )}
           </Toolbar>
         </AppBar>
-        {appState.authenticated && (
+        {userStore.currentUser && (
           <nav className={classes.drawer}>
             {/* The implementation can be swap with js to avoid SEO duplication of links. */}
             <Hidden smUp implementation="css">
               <Drawer
-                container={this.props.container}
                 variant="temporary"
                 anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                 open={this.state.mobileOpen}
@@ -248,7 +246,6 @@ ClippedDrawer.propTypes = {
   classes: PropTypes.object.isRequired,
   history: PropTypes.array,
   children: PropTypes.object.isRequired,
-  appState: MobxPropTypes.observableArray,
   theme: PropTypes.object.isRequired
 }
 

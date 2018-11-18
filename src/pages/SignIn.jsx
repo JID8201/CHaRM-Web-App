@@ -47,64 +47,82 @@ const styles = theme => ({
   },
 })
 
-@inject('appState')
+@inject('authStore', 'userStore')
 @observer
 class SignIn extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      redirect: false
+      redirect: false,
+      email: '',
+      password: ''
     }
   }
 
-    login = () => {
-      this.props.appState.authenticate()
-    }
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value })
+  }
 
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value })
+  }
 
-    render() {
-      if (this.props.appState.authenticated && !this.props.appState.authenticating) {
-        return <Redirect push to="/" />
-      }
-      return (
-        <React.Fragment>
-          <CssBaseline />
-          <main className={this.props.classes.layout}>
-            <Paper className={this.props.classes.paper}>
-              <Avatar className={this.props.classes.avatar}>
-                <LockIcon />
-              </Avatar>
-              <Typography variant="h5">Sign in</Typography>
-              <form className={this.props.classes.form}>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="email">Email Address</InputLabel>
-                  <Input id="email" name="email" autoComplete="email" autoFocus />
-                </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input
-                    name="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                  />
-                </FormControl>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  className={this.props.classes.submit}
-                  onClick={this.login}
-                >
-                Sign in
-                </Button>
-              </form>
-              <Typography variant="subtitle1" style={{ paddingTop: '20px' }}><Link to='/forgot-password' style={{ color: 'black', textDecoration: 'none' }}>Forgot your password?</Link></Typography>
-            </Paper>
-            <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='register' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
-          </main>
-        </React.Fragment>
-      )
+  handleSubmit = (event) => {
+    this.props.authStore.login(this.state.email, this.state.password)
+    event.preventDefault()
+  }
+
+  render() {
+    const { currentUser } = this.props.userStore
+    if (currentUser) {
+      return <Redirect push to="/" />
     }
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <main className={this.props.classes.layout}>
+          <Paper className={this.props.classes.paper}>
+            <Avatar className={this.props.classes.avatar}>
+              <LockIcon />
+            </Avatar>
+            <Typography variant="h5">Sign in</Typography>
+            <form className={this.props.classes.form} onSubmit={this.handleSubmit}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="email">Email Address</InputLabel>
+                <Input
+                  id="email"
+                  name="email"
+                  autoComplete="email"
+                  autoFocus
+                  onChange={this.handleEmailChange}
+                />
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input
+                  name="password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={this.handlePasswordChange}
+                />
+              </FormControl>
+              <Button
+                fullWidth
+                variant="contained"
+                className={this.props.classes.submit}
+                type="submit"
+              >
+              Sign in
+              </Button>
+            </form>
+            <Typography variant="subtitle1" style={{ paddingTop: '20px' }}><Link to='/forgot-password' style={{ color: 'black', textDecoration: 'none' }}>Forgot your password?</Link></Typography>
+          </Paper>
+          <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='register' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
+        </main>
+      </React.Fragment>
+    )
+  }
 }
 
 SignIn.propTypes = {

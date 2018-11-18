@@ -4,24 +4,30 @@ import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import { inject, observer } from 'mobx-react'
+import { Divider } from '@material-ui/core'
 
+@inject('userStore')
+@observer
 class Profile extends React.Component {
 
   render() {
+    const { currentUser } = this.props.userStore
     return (
       <Card>
         <CardContent>
-          <Typography variant="h5" component="h2">
-                    Profile Page
+          <Typography variant="h5">
+            Profile Page
           </Typography>
-          <Typography component="p">
-                        Name: Olivia Powell
+          <Divider style={{ marginBottom: '20px' }} />
+          <Typography variant="subtitle1">
+              Name: {currentUser.firstName} {currentUser.lastName}
             <br />
-                        Email: opowell6@gatech.edu
+              Email: {currentUser.email}
           </Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Edit</Button>
+          <Button size="small" disabled={true}>Edit</Button>
         </CardActions>
       </Card>
     )

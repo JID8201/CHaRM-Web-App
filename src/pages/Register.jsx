@@ -9,11 +9,11 @@ import LockIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
-import { Redirect } from 'react-router'
 import { inject, observer } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import {PropTypes as MobxPropTypes} from 'mobx-react'
 import PropTypes from 'prop-types'
+import {Redirect} from 'react-router'
 
 const styles = theme => ({
   layout: {
@@ -47,81 +47,121 @@ const styles = theme => ({
   },
 })
 
-@inject('appState')
+@inject('authStore', 'userStore')
 @observer
 class Register extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      redirect: false
+      redirect: false,
+      emailError: false,
+      firstName: '',
+      lastName: '',
+      password: '',
+      confirmPassword: '',
+      email: '',
+      passwordError: false
     }
   }
 
-    login = () => {
-      this.props.appState.authenticate()
-    }
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value })
+  }
 
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value }, () => {
+      this.setState({ emailError: !this.validateEmail(this.state.email) })
+    })
+  }
 
-    render() {
-      if (this.props.appState.authenticated && !this.props.appState.authenticating) {
-        return <Redirect push to="/" />
+  handlePasswordChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value }, () => {
+      if (this.state.password && this.state.confirmPassword) {
+        this.setState({ passwordError: this.state.password !== this.state.confirmPassword })
       }
-      return (
-        <React.Fragment>
-          <CssBaseline />
-          <main className={this.props.classes.layout}>
-            <Paper className={this.props.classes.paper}>
-              <Avatar className={this.props.classes.avatar}>
-                <LockIcon />
-              </Avatar>
-              <Typography variant="h5">Register</Typography>
-              <form className={this.props.classes.form}>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="first-name">First Name</InputLabel>
-                  <Input id="first-name" name="first-name" autoComplete="first-name" autoFocus />
-                </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="last-name">Last Name</InputLabel>
-                  <Input id="last-name" name="last-name" autoComplete="last-name" autoFocus />
-                </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="email">Email Address</InputLabel>
-                  <Input id="email" name="email" autoComplete="email" autoFocus />
-                </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="password">Password</InputLabel>
-                  <Input
-                    name="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                  />
-                </FormControl>
-                <FormControl margin="normal" required fullWidth>
-                  <InputLabel htmlFor="confirm-password">Password</InputLabel>
-                  <Input
-                    name="confirm-password"
-                    type="confirm-password"
-                    id="confirm-password"
-                    autoComplete="current-password"
-                  />
-                </FormControl>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  className={this.props.classes.submit}
-                  onClick={this.login}
-                >
-                Sign in
-                </Button>
-              </form>
-              <Typography variant="subtitle1" style={{ paddingTop: '20px' }}><Link to='/forgot-password' style={{ color: 'black', textDecoration: 'none' }}>Forgot your password?</Link></Typography>
-            </Paper>
-            <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}>Don't have an account? <Link to='create-account' style={{ color: '#33691e', textDecoration: 'none' }}>Create one</Link></Typography>
-          </main>
-        </React.Fragment>
-      )
+    })
+  }
+
+  validateEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return re.test(String(email).toLowerCase())
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    this.props.authStore.register(
+      this.state.firstName,
+      this.state.lastName,
+      this.state.email,
+      this.state.password
+    )
+  }
+
+  render() {
+    const { currentUser } = this.props.userStore
+    if (currentUser) {
+      return <Redirect push to="/" />
     }
+    return (
+      <React.Fragment>
+        <CssBaseline />
+        <main className={this.props.classes.layout}>
+          <Paper className={this.props.classes.paper}>
+            <Avatar className={this.props.classes.avatar}>
+              <LockIcon />
+            </Avatar>
+            <Typography variant="h5">Register</Typography>
+            <form className={this.props.classes.form} onSubmit={this.handleSubmit}>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="firstname">First Name</InputLabel>
+                <Input id="first-name" name="firstName" autoComplete="first-name" autoFocus onChange={this.handleChange}/>
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="last-name">Last Name</InputLabel>
+                <Input id="last-name" name="lastName" autoComplete="last-name" autoFocus onChange={this.handleChange}/>
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="email">Email Address</InputLabel>
+                <Input id="email" name="email" autoComplete="email" autoFocus onChange={this.handleEmailChange} error={this.state.emailError}/>
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <Input
+                  name="password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onChange={this.handlePasswordChange}
+                  error={this.state.passwordError}
+                />
+              </FormControl>
+              <FormControl margin="normal" required fullWidth>
+                <InputLabel htmlFor="confirm-password">Confirm Password</InputLabel>
+                <Input
+                  name="confirmPassword"
+                  type="password"
+                  id="confirm-password"
+                  autoComplete="current-password"
+                  onChange={this.handlePasswordChange}
+                  error={this.state.passwordError}
+                />
+              </FormControl>
+              <Button
+                fullWidth
+                variant="contained"
+                className={this.props.classes.submit}
+                type="submit"
+                disabled={this.state.passwordError || this.state.emailError}
+              >
+              Register
+              </Button>
+            </form>
+          </Paper>
+          <Typography variant="subtitle1" style={{ textAlign: 'center', paddingTop: '20px' }}><Link to='/login' style={{ color: '#33691e', textDecoration: 'none' }}>Sign In</Link></Typography>
+        </main>
+      </React.Fragment>
+    )
+  }
 }
 
 Register.propTypes = {
