@@ -12,12 +12,11 @@ module.exports.create = (req, res, next) => {
   Recycling.create({
     items: req.body.items,
     zip: req.body.zip,
-  }, (err, _) => {
+  }, (err, results) => {
     if (err) {
-      console.error(err)
       return next(err)
     } else {
-      return res.status(201).json({ msg: 'Recycling data successfully created' })
+      return res.status(201).json({ recycling: results })
     }
   })
 }
@@ -38,7 +37,6 @@ module.exports.getDateRange = (req, res, next) => {
       }
     ], (err, result) => {
       if (err) {
-        console.error(err)
         return next(err)
       } else {
         return res.status(200).json({ recycling: result })
@@ -47,7 +45,6 @@ module.exports.getDateRange = (req, res, next) => {
   } else { // fail safe
     Recycling.aggregate([{ $unwind: '$items' }], (err, result) => {
       if (err) {
-        console.error(err)
         return next(err)
       } else {
         return res.status(200).json({ recycling: result })
@@ -75,7 +72,6 @@ module.exports.getGraphData = (req, res, next) => {
       }
     ], (err, results) => {
       if (err) {
-        console.error(err)
         return next(err)
       } else {
         return res.status(200).json({ recycling: results })
@@ -91,7 +87,6 @@ module.exports.getGraphData = (req, res, next) => {
       }
     ], (err, results) => {
       if (err) {
-        console.error(err)
         return next(err)
       } else {
         return res.status(200).json({ recycling: results })
@@ -129,7 +124,6 @@ module.exports.getYearCSV = (req, res, next) => {
     ], (err, result) => {
       if (err) {
         csvStream.end()
-        console.error(err)
         return next(err)
       }
       let filename = year.toString() + '.csv'

@@ -26,11 +26,9 @@ module.exports.create = (req, res, next) => {
     //use schema.create to insert data into the db
     User.create(userData, function (err, user) {
       if (err) {
-        console.error(err)
         return next(err)
       } else {
-        res.status(201).json({ user: user.toAuthJSON() })
-        return next()
+        return res.status(201).json({ user: user.toAuthJSON() })
       }
     })
   }
