@@ -11,7 +11,6 @@ import GraphData from './GraphData'
 import ProfilePage from './ProfilePage'
 import { hot } from 'react-hot-loader'
 import Export from './Export'
-import MapContainer from './MapContainer'
 import Register from './Register'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
@@ -47,7 +46,6 @@ class App extends Component {
               <PrivateRoute exact path="/graph" component={GraphData}/>
               <PrivateRoute exact path="/profile" component={ProfilePage} />
               <PrivateRoute exact path="/export" component={Export} />
-              <PrivateRoute exact path="/map" component={MapContainer} />
               <PrivateRoute path="/" component={RecyclingData} />
             </Switch>
           </NavSideBar>
