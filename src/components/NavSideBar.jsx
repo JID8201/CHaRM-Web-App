@@ -145,12 +145,6 @@ class ClippedDrawer extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Export" />
           </ListItem>
-          <ListItem button onClick={this.handleMapClick}>
-            <ListItemIcon>
-              <Map />
-            </ListItemIcon>
-            <ListItemText primary='Heat Map' />
-          </ListItem>
         </List>
       </div>
     )
