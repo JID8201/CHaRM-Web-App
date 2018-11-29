@@ -1,7 +1,7 @@
 import { Router } from 'express'
 const router = Router()
-import { create as createUser, getGraphData, getDateRange, getYearCSV } from './controllers/recycling'
-import { create as createRecycling, login, getUser } from './controllers/users'
+import { create as createRecycling, getGraphData, getDateRange, getYearCSV } from './controllers/recycling'
+import { create as createUser, login, getUser } from './controllers/users'
 import passport from 'passport'
 require('./configs/passport')
 
