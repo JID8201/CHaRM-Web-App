@@ -1,6 +1,6 @@
 import { Router } from 'express'
 const router = Router()
-import { getGraphData, getDateRange, getYearCSV } from './controllers/recycling'
+import {create, getGraphData, getDateRange, getYearCSV } from './controllers/recycling'
 import { create, login, getUser } from './controllers/users'
 import passport from 'passport'
 require('./configs/passport')
@@ -9,7 +9,7 @@ router.post('/register', create)
 router.post('/login', login)
 
 
-router.post('/recycling')
+router.post('/recycling', create)
 router.get('/recycling', passport.authenticate('jwt', {session: false}), getDateRange)
 router.get('/graph-data', passport.authenticate('jwt', {session: false}), getGraphData)
 router.get('/yearcsv', getYearCSV) // unprotected until I can figure out how to download with headers
