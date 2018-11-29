@@ -16,6 +16,11 @@ const styles = () => ({
   button: {
     margin: '5px',
     zIndex: '1'
+  },
+  graphContainer: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute'
   }
 })
 
@@ -89,7 +94,9 @@ class GraphData extends React.Component {
           Bar
           </Button>
         </div>
-        <Graph graph={this.state.graph} data={this.props.recyclingStore.graphData}/>
+        <div className={classes.graphContainer}>
+          <Graph graph={this.state.graph} data={this.props.recyclingStore.graphData}/>
+        </div>
       </div>
     )
   }
