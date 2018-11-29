@@ -9,7 +9,7 @@ router.post('/register', create)
 router.post('/login', login)
 
 
-router.post('/testing', create)
+router.post('/recycling', create)
 router.get('/recycling', passport.authenticate('jwt', {session: false}), getDateRange)
 router.get('/graph-data', passport.authenticate('jwt', {session: false}), getGraphData)
 router.get('/yearcsv', getYearCSV) // unprotected until I can figure out how to download with headers
