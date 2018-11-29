@@ -1,5 +1,5 @@
 import React from 'react'
-import { PieChart, Pie, Cell, Sector, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
+import { PieChart, Pie, Cell, Sector, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 import PropTypes from 'prop-types'
 
 class Graph extends React.Component {
@@ -64,7 +64,7 @@ class Graph extends React.Component {
         <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none"/>
         <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">{`${payload._id.items}`}</text>
         <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-          {`(Rate ${(percent * 100).toFixed(2)}%)`}
+          {`(${(percent * 100).toFixed(2)}%)`}
         </text>
       </g>
     )
@@ -85,16 +85,14 @@ class Graph extends React.Component {
   pie = (data) => {
 
     return (
-      <PieChart width={800} height={400}>
+      <PieChart>
         <Pie
           activeIndex={this.state.activeIndex}
           activeShape={this.renderActiveShape}
           dataKey='amount'
           data={data}
-          cx={300}
-          cy={200}
-          innerRadius={100}
-          outerRadius={120}
+          innerRadius='65%'
+          outerRadius='72%'
           fill="#8884d8"
           onMouseEnter={this.onPieEnter}
         >
@@ -126,15 +124,15 @@ class Graph extends React.Component {
     const { graph, data } = this.props
     if (graph === 'bar') {
       return (
-        <div>
+        <ResponsiveContainer height={300} width='75%'>
           {this.bar(data)}
-        </div>
+        </ResponsiveContainer>
       )
     } else if (graph === 'donut') {
       return (
-        <div>
+        <ResponsiveContainer width='75.6%' height='75.6%'>
           {this.pie(data)}
-        </div>
+        </ResponsiveContainer>
       )
     } else {
       return (
