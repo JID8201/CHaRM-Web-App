@@ -2,7 +2,7 @@
 
 This application was developed for Georgia Tech's Junior Design program.
 
-The Mobile application that accompanies this web application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
+The mobile application that accompanies this web application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
 
 Development was done by
 - [Lucas Maurer](lmaurer9@gatech.edu)
