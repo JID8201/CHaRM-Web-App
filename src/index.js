@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './assets/styles/index.css'
 import App from './pages/App'
-import registerServiceWorker from './registerServiceWorker'
 import authStore from './stores/authStore'
 import commonStore from './stores/commonStore'
 import recyclingStore from './stores/recyclingStore'
@@ -29,4 +28,3 @@ ReactDOM.render(
   </MuiThemeProvider>,
   document.getElementById('root')
 )
-registerServiceWorker()
