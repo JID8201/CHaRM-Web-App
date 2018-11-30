@@ -30,7 +30,7 @@ This project was sponsored by [Live Thrive](http://livethrive.org/) and Peggy Wh
 
 ### Known Bugs
 - Lacks heatmap feature
-- Any error from checkPropTypes is a  known issue with React Hot Loader
+- Any errors from checkPropTypes is a known issue with ReactHotLoader
 
 # *Install Guide*
 
@@ -62,10 +62,10 @@ Once inside the CHaRM-Web-App directory, type the following command into the ter
 
  ```npm install```
 
-This will install all required dependencies, and build the website which will take a minute or so.
+This will install all required packages, and build the website which will take a minute or so.
 
 ## Run Instructions
-To run the web app, all you need to do is type the following command into the same terminal used to build the web app
+To run the web app, all you need to do is run the following command from the root project folder
 
 ```npm run dev```
 
@@ -77,5 +77,5 @@ The website runs on port 3000 and the backend runs on port 3001
 - The website might take a minute to load so *be patient*
 - Debugging the [live website](https://charm-web-app.herokuapp.com) is difficult to impossible. If you're adding functionality to the web app, do so in a feature branch and debug locally
 - Console log statements are your friend when trying to track down bugs
-- If you visit the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser and clean your cache. 
-- Pick an IDE capable of debugging javascript (VS Code is a great option) and use that. 
+- Pick an IDE capable of debugging javascript (VS Code is a great option) and use that.
+- If you visit the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser and clean your cache.  
