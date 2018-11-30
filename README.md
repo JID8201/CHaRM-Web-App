@@ -2,7 +2,7 @@
 
 This appliation was developed for Georgia Tech's Junior Design program.
 
-The web application that acompanies this mobile application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
+The Mobile application that acompanies this web application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
 
 Development was done by
 - [Lucas Maurer](lmaurer9@gatech.edu)
@@ -26,6 +26,7 @@ This project was sponsered by [Live Thrive](http://livethrive.org/) and Peggy Wh
 ### Bug Fixes
 - Fixed bug that prevented submitting recycling orders
 - Removed unsafe dependency react-heatmap-jsx
+- Made graphs larger so that all elements show up correctly
 
 ### Known Bugs
 - Lacks heatmap feature
