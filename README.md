@@ -42,7 +42,11 @@ This project was sponsored by [Live Thrive](http://livethrive.org/) and Peggy Wh
 ## Dependencies
 - Node 10+
 - npm 6+
-- email opowell6@gatech.edu for environment variables necessary for MongoDB
+- email opowell6@gatech.edu for environment variables necessary for MongoDB else create a file named ```.env``` in the root folder containing the following keys
+  - ```SECRET_KEY``` set it to any string
+  - ```SECRET_KEY_EXP``` set it to a 2 digit number
+  - ```MONGO_URL``` set this to your mongo connection string
+  - ```PORT``` set this to your desired port or it defaults to 3001
 
 ## Download Instructions
 The website app code can be downloaded:
