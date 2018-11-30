@@ -18,7 +18,7 @@ This project was sponsered by [Live Thrive](http://livethrive.org/) and Peggy Wh
 
 ## V1.0.0
 ### New Features
-- Website is live at [https://charm-web-app.herokuapp.com/](https://charm-web-app.herokuapp.com/)
+- Website is live at [https://charm-web-app.herokuapp.com/](https://charm-web-app.herokuapp.com/) (As of now the web app is being hosted using [Heroku](https://dashboard.heroku.com/)
 - Mobile users can now submit multiple recycle orders at once
 - Removed Heatmap functionality due to security concerns and scalability
 - Verified UI is fluid and easy to use
@@ -37,6 +37,7 @@ This project was sponsered by [Live Thrive](http://livethrive.org/) and Peggy Wh
 ## Pre-requisites
 - A computer
 - Access to the internet 
+- One of the following: MongoDB, MONGODB Atlas, or MLab
 
 ## Dependencies
 - Node 10+
