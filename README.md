@@ -75,6 +75,7 @@ The website runs on port 3000 and the backend runs on port 3001
 
 ## Troubleshooting
 - The website might take a minute to load so *be patient*
-- Debugging the [live website](https://charm-web-app.herokuapp.com) is a pain. If you're adding functionality to the web app, do so in a feature branch and debug locally
+- Debugging the [live website](https://charm-web-app.herokuapp.com) is difficult to impossible. If you're adding functionality to the web app, do so in a feature branch and debug locally
 - Console log statements are your friend when trying to track down bugs
-- If you visit the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser.
+- If you visit the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser and clean your cache. 
+- Pick an IDE capable of debugging javascript (VS Code is a great option) and use that. 
