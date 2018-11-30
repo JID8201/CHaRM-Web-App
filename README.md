@@ -1,8 +1,8 @@
 ## **CHaRM Web App**
 
-This appliation was developed for Georgia Tech's Junior Design program.
+This application was developed for Georgia Tech's Junior Design program.
 
-The Mobile application that acompanies this web application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
+The Mobile application that accompanies this web application can be found [here](https://github.com/JID8201/CHaRM-Android-App)
 
 Development was done by
 - [Lucas Maurer](lmaurer9@gatech.edu)
@@ -12,7 +12,7 @@ Development was done by
 - [Bowen Ran](bran3@gatech.edu)
 - [Quynh Nhu Nguyen](qnguyen47@gatech.edu)
 
-This project was sponsered by [Live Thrive](http://livethrive.org/) and Peggy Whitlow Ratcliffe
+This project was sponsored by [Live Thrive](http://livethrive.org/) and Peggy Whitlow Ratcliffe
 
 # *Release Notes*
 
@@ -56,7 +56,7 @@ git clone git@github.com:JID8201/CHaRM-Web-App.git
 ```
 
 ## Installation/Build Instructions 
-To install the web app, open a terminal and manuever to the CHaRM-Web-App source code.
+To install the web app, open a terminal and maneuver to the CHaRM-Web-App source code.
 
 Once inside the CHaRM-Web-App directory, type the following command into the terminal
 
@@ -77,4 +77,4 @@ The website runs on port 3000 and the backend runs on port 3001
 - The website might take a minute to load so *be patient*
 - Debugging the [live website](https://charm-web-app.herokuapp.com) is a pain. If you're adding functionality to the web app, do so in a feature branch and debug locally
 - Console log statements are your friend when trying to track down bugs
-- If you vist the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser.
+- If you visit the [live website](https://charm-web-app.herokuapp.com) site and nothing loads but you are SURE that nothing is wrong server side, check to make sure you have cookies enabled in your browser.
